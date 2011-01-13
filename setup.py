@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='django-plugins',
-      version='0.1',
+      version='0.2',
       author='Mantas Zimnickas',
       author_email='sirexas@gmail.com',
       packages=find_packages(),
@@ -13,7 +13,7 @@ setup(name='django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
       license='LGPL',
       description='django-plugins.',
-      long_description=open('README.rst').read(),
+      long_description=open('README.rst').read()+open('CHANGES.rst'),
       classifiers = [
           'Development Status :: 5 - Production/Stable',
           'Environment :: Web Environment',

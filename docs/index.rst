@@ -8,18 +8,22 @@ Introduction
 will be able to define plugin points, plugins and various ways, how plugins can
 be integrated to your base app and extended from other apps.
 
+The idea for ``django-plugins`` was taken from `Marty Alchin blog`_, for in deep
+understanding about how this plugin system work, read `Marty Alchin blog`_.
+
+.. _Marty Alchin blog: http://martyalchin.com/2008/jan/10/simple-plugin-framework/
+
 **Features**
 
 - Synchronization with database.
-- ``PluginField`` for your models.
+- ``PluginField`` and ``ManyPluginField`` fields for your models.
 - Possibility to include plugins to urls.
 - Possibility to access plugins from templates.
 
-Registering plugins and plugin points
+Plugin points
 -------------------------------------
 
-Recommended way is to place all plugins and plugin points to ``__init__.py``
-file of your django app.
+All plugin points should be placed in ``plugin_points.py`` file.
 
 Example how to register a plugin point::
 
@@ -42,8 +46,12 @@ Example how to register a plugin point::
         __metaclass__ = PluginMount
 
 
+All plugins should be placed in ``plugins.py`` file.
+
 Example, how to register plugin, that implements ``MyPluginPoint``, defined
 above::
+
+    from my_app.plugin_points import MyPluginPoint
 
     class MyPlugin1(MyPluginPoint):
         title = 'Plugin 1'
@@ -51,31 +59,45 @@ above::
     class MyPlugin2(MyPluginPoint):
         title = 'Plugin 2'
 
-Synchronizing to database
--------------------------
+.. note::
+   If you use Python 2.6 or older, and you get import errors, then you should
+   use absolute imports: ``from __future__ import absolute_import``::
+
+       from __future__ import absolute_import
+
+       # Global import
+       from plugins import PluginMount
+
+       # Relative import
+       from .plugins import MyPluginPoint
+
+Database
+--------
 
 All defined plugins and plugin points can be synchronized to database using
-Django management command ``syncplugins``.
+Django management command ``syncplugins``. All plugins will be synchronized
+automatically, when you run ``syncdb`` command.
 
 When added to database, plugins can be ordered, disabled, accessed from Django
 admin, etc.
 
-``syncplugins`` command detects if plugins or points where removed from code
-and marks them as ``REMOVED``, but leaves then in place. If you want to clean
-up your database and really delete all removed plugins us ``--delete`` flag.
+``syncplugins`` command detects if plugins or plugin points where removed from
+code and marks them as ``REMOVED``, but leaves them in place. If you want to
+clean up your database and really delete all removed plugins us ``--delete``
+flag.
 
 Utilizing available plugins
 ---------------------------
 
 There are many ways how you can use plugins and plugin points. Out of the box
-plugins are stored as python objects and recored in database.
+plugins are stored as python objects and synchronized to database.
 
 ``get_plugins`` method of each plugin point class and plugin point model
 instance, returns list of plugins instances.
 
 Example, how to use plugins::
 
-    from my_app import MyPluginPoint
+    from my_app.plugin_points import MyPluginPoint
 
     @register.inclusion_tag('templatetags/actions.html', takes_context=True)
     def my_plugins(context):
@@ -94,7 +116,7 @@ If you need to order or filter plugins, you can always access them via Django
 models::
 
     from plugins.models import PluginPoint
-    from my_app import MyPluginPoint
+    from my_app.plugin_points import MyPluginPoint
 
     @render_to('my_app/my_template.html')
     def my_view(request):
@@ -102,27 +124,32 @@ models::
         plugins = point.plugin_set.order_by('name')
         return {'plugins': plugins}
 
-Using plugins as fields
------------------------
+Fields
+------
 
-::
+You can tie your models with plugins. Using example below, plugins can be
+assigned to model instances::
 
     from django.db import models
     from plugins.fields import PluginField
-    from my_app import MyPluginPoint
+    from my_app.plugin_points import MyPluginPoint
 
     class MyModel(models.Model):
         plugin = PluginField(MyPluginPoint)
 
-Using plugins in urls
----------------------
+
+Also there is ``ManyPluginField``, for many-to-many relation.
+
+
+Urls
+----
 
 ``django-plugins`` has build-in possibility to include urls from plugins. Here
 is example how this can be done::
 
     from django.conf.urls.defaults import *
     from plugins.utils import include_plugins
-    from my_app import MyPluginPoint
+    from my_app.plugin_points import MyPluginPoint
 
     urlpatterns = patterns('wora.views',
         (r'^plugin/', include_plugins(MyPluginPoint)),
@@ -135,7 +162,7 @@ included. Example plugin::
     class MyPluginWithUrls(MyPluginPoint):
         name = 'my-plugin'
         urls = patterns('my_app.views',
-                (r'create/$', 'my_view', {}, 'my_app-create'),
+                (r'create/$', 'my_view', {}, 'my-app-create'),
             )
 
 With this plugin, plugin point inclusion will provide these urls::
@@ -143,13 +170,13 @@ With this plugin, plugin point inclusion will provide these urls::
     plugin/my-plugin/create
 
 
-Using plugins in templates
---------------------------
+Templates
+---------
 
 You can access your plugins in templates using ``get_plugins`` template tag.::
 
     {% load plugins %}
-    {% get_plugins my_app.MyPluginPoint as plugins %}
+    {% get_plugins my_app.plugin_points.MyPluginPoint as plugins %}
     <ul>
         {% for plugin in plugins %}
         <li>{{ plugin.title }}</li>
