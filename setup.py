@@ -13,7 +13,7 @@ setup(name='django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
       license='LGPL',
       description='django-plugins.',
-      long_description=open('README.rst').read()+open('CHANGES.rst'),
+      long_description=open('README.rst').read()+open('CHANGES.rst').read(),
       classifiers = [
           'Development Status :: 5 - Production/Stable',
           'Environment :: Web Environment',
