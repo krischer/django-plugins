@@ -14,43 +14,64 @@ class MyPlugin(MyPluginPoint):
     pass
 
 
-class SimpleTest(TestCase):
-    def test_plugin_sync(self):
-        points = PluginPoint.objects.filter(
+class PluginSyncTestCaseBase(TestCase):
+    def delete_plugins_from_db(self):
+        Plugin.objects.all().delete()
+        PluginPoint.objects.all().delete()
+
+    def prepate_query_sets(self):
+        self.points = PluginPoint.objects.filter(
                         name='plugins.tests.MyPluginPoint')
-        plugins = Plugin.objects.filter(
+        self.plugins = Plugin.objects.filter(
                         name='plugins.tests.MyPlugin')
 
-        # At first there should not be any plugins in database
-        self.assertEqual(points.count(), 0)
-        self.assertEqual(plugins.count(), 0)
 
-        # Now sync plugins and check if they appear in database
-        sync = SyncPlugins(False, 0)
-        sync.all()
-        self.assertEqual(points.filter(status=ENABLED).count(), 1)
-        self.assertEqual(plugins.filter(status=ENABLED).count(), 1)
+class PluginSyncTestCase(PluginSyncTestCaseBase):
+    def setUp(self):
+        self.delete_plugins_from_db()
+        self.prepate_query_sets()
 
-        # Remove all plugin points and sync again, without deleting.
-        # All plugin points (but not plugins) should be marked as REMOVED
-        points_copy = PluginMount.points
-        PluginMount.points = []
-        sync.all()
-        self.assertEqual(points.filter(status=REMOVED).count(), 1)
-        self.assertEqual(plugins.filter(status=REMOVED).count(), 0)
+    def test_plugins_not_synced(self):
+        """
+        At first there should not be any plugins in database
+        """
+        self.assertEqual(self.points.count(), 0)
+        self.assertEqual(self.plugins.count(), 0)
 
-        # Sync plugins again, with deleting all removed from database.
-        # Using cascaded deletes, all plugins, that belongs to being deleted
-        # plugin points will be deleted also.
-        sync = SyncPlugins(True, 0)
-        sync.all()
-        self.assertEqual(points.count(), 0)
-        self.assertEqual(plugins.count(), 0)
-
-        PluginMount.points = points_copy
-        sync = SyncPlugins(False, 0)
-        sync.all()
-
-    def test_plugins(self):
+    def test_plugins_are_synced(self):
+        """
+        Now sync plugins and check if they appear in database
+        """
         SyncPlugins(False, 0).all()
-        pass
+        self.assertEqual(self.points.filter(status=ENABLED).count(), 1)
+        self.assertEqual(self.plugins.filter(status=ENABLED).count(), 1)
+
+
+class PluginSyncRemovedTestCase(PluginSyncTestCaseBase):
+    def setUp(self):
+        self.prepate_query_sets()
+        self.copy_of_points = PluginMount.points
+
+    def tearDown(self):
+        PluginMount.points = self.copy_of_points
+
+    def test_removed_plugins(self):
+        """
+        Remove all plugin points and sync again, without deleting.
+        All plugin points (but not plugins) should be marked as REMOVED
+        """
+        PluginMount.points = []
+        SyncPlugins(False, 0).all()
+        self.assertEqual(self.points.filter(status=REMOVED).count(), 1)
+        self.assertEqual(self.plugins.filter(status=REMOVED).count(), 0)
+
+    def test_sync_and_delete(self):
+        """
+        Sync plugins again, with deleting all removed from database.
+        Using cascaded deletes, all plugins, that belongs to being deleted
+        plugin points will be deleted also.
+        """
+        PluginMount.points = []
+        SyncPlugins(True, 0).all()
+        self.assertEqual(self.points.count(), 0)
+        self.assertEqual(self.plugins.count(), 0)
