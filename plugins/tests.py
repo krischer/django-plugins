@@ -75,3 +75,13 @@ class PluginSyncRemovedTestCase(PluginSyncTestCaseBase):
         SyncPlugins(True, 0).all()
         self.assertEqual(self.points.count(), 0)
         self.assertEqual(self.plugins.count(), 0)
+
+
+class PluginModels(TestCase):
+    def test_plugins_of_point(self):
+        plugin = Plugin.objects.get(name='plugins.tests.MyPlugin')
+        qs = MyPluginPoint.get_plugins_qs()
+        self.assertEqual(qs[0].id, plugin.id)
+
+    def test_plugins_of_plugin(self):
+        self.assertRaises(PluginPoint.DoesNotExist, MyPlugin.get_plugins_qs)

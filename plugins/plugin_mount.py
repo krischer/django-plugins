@@ -1,3 +1,6 @@
+from .models import PluginPoint
+from .utils import get_plugin_name
+
 class PluginMount(type):
     """
     See: http://martyalchin.com/2008/jan/10/simple-plugin-framework/
@@ -31,3 +34,16 @@ class PluginMount(type):
         kwargs to plugin constructor.
         """
         return [p(*args, **kwargs) for p in cls.plugins]
+
+    def get_plugins_qs(cls):
+        """
+        Returns query set of all plugins belonging to plugin point.
+
+        Example::
+
+            for plugin_instance in MyPluginPoint.get_plugins_qs():
+                print(plugin_instance.get_plugin().name)
+
+        """
+        instance = PluginPoint.objects.get(name=get_plugin_name(cls))
+        return instance.plugin_set.all()
