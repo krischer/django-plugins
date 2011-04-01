@@ -26,3 +26,14 @@ def include_plugins(point):
         if hasattr(plugin, 'urls') and hasattr(plugin, 'name'):
             urls.append((r'%s/' % (plugin.name), include(plugin.urls)))
     return include(patterns('', *urls))
+
+
+def get_plugin_by_name(point, name):
+    """
+    Return plugin by plugin name defined in plugin class.
+
+    """
+    for plugin in point.get_plugins():
+        if hasattr(plugin, 'name') and plugin.name == name:
+            return plugin
+    return None
