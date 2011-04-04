@@ -33,6 +33,9 @@ class PluginManager(models.Manager):
     def get_plugin(self, plugin):
         return self.get(name=get_plugin_name(plugin))
 
+    def get_plugins_of(self, point):
+        return self.filter(point__name=get_plugin_name(point))
+
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
