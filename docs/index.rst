@@ -6,77 +6,79 @@ Introduction
 
 ``django-plugins`` will help you to make your Django app more reusable. You
 will be able to define plugin points, plugins and various ways, how plugins can
-be integrated to your base app and extended from other apps.
+be integrated to your base app and extended from other apps providing plugins.
 
-The idea for ``django-plugins`` was taken from `Marty Alchin blog`_, for in deep
-understanding about how this plugin system work, read `Marty Alchin blog`_.
+The idea for ``django-plugins`` was taken from `Marty Alchin blog`_, for in
+deep understanding about how this plugin system work, read `Marty Alchin
+blog`_.
 
 .. _Marty Alchin blog: http://martyalchin.com/2008/jan/10/simple-plugin-framework/
 
 **Features**
 
 - Synchronization with database.
-- ``PluginField`` and ``ManyPluginField`` fields for your models.
+- Plugin management from Django admin.
+- Model fields:
+    - ``PluginField``
+    - ``ManyPluginField``
+- Form fields:
+    - ``PluginChoiceField``
+    - ``PluginModelChoiceField``
+    - ``PluginMultipleChoiceField``
+    - ``PluginModelMultipleChoiceField``
 - Possibility to include plugins to urls.
 - Possibility to access plugins from templates.
+- Many ways to access plugins and associated models.
 
-Plugin points
--------------------------------------
+How to use it in your app?
+--------------------------
 
-All plugin points should be placed in ``plugin_points.py`` file.
+All plugin points and plugins live in ``plugins.py`` file in your django app
+folder.
 
 Example how to register a plugin point::
 
-    from plugins import PluginMount
+    from django.contrib.plugins import PluginMount
 
-    class MyPluginPoint:
+    class MyPluginPoint(object):
         """
         Documentation, that describes how plugins can implement this plugin
         point.
-
-        Example:
-
-        Plugins implementing this reference should provide the following attributes:
-
-        ========  ========================================================
-        title     The text to be displayed, describing the action
-        ========  ========================================================
 
         """
         __metaclass__ = PluginMount
 
 
-All plugins should be placed in ``plugins.py`` file.
-
 Example, how to register plugin, that implements ``MyPluginPoint``, defined
 above::
 
-    from my_app.plugin_points import MyPluginPoint
-
     class MyPlugin1(MyPluginPoint):
+        name = 'plugin-1'
         title = 'Plugin 1'
 
     class MyPlugin2(MyPluginPoint):
+        name = 'plugin-1'
         title = 'Plugin 2'
 
-.. note::
-   If you use Python 2.6 or older, and you get import errors, then you should
-   use absolute imports: ``from __future__ import absolute_import``::
+All plugins must define at least ``name`` and ``title`` attributes. These
+properties are used everywhere in plugin system.
 
-       from __future__ import absolute_import
+``name``
+    This is a slug like name, used in urls and similar places.
 
-       # Global import
-       from plugins import PluginMount
-
-       # Relative import
-       from .plugins import MyPluginPoint
+``title``
+    Any human readable title for plugin. Value of this attribute will be shown
+    to users everywhere.
+    
 
 Database
 --------
 
-All defined plugins and plugin points can be synchronized to database using
-Django management command ``syncplugins``. All plugins will be synchronized
-automatically, when you run ``syncdb`` command.
+All defined plugins and plugin points are synchronized to database using Django
+management command ``syncplugins`` or ``syncdb``. ``syncdb`` should be always
+enough, but some times, if you added or changed plugins code and need to update
+those changes to database, but don't want anything more, then you should use
+``syncplugins`` management command.
 
 When added to database, plugins can be ordered, disabled, accessed from Django
 admin, etc.
@@ -90,14 +92,49 @@ Utilizing available plugins
 ---------------------------
 
 There are many ways how you can use plugins and plugin points. Out of the box
-plugins are stored as python objects and synchronized to database.
+plugins are stored as python objects and synchronized to database called plugin
+models.
+
+Each plugin is linked to one record of ``django.contrib.plugins.models.Plugin``
+model. Plugins provides all login, plugin models provides all database
+possibilities, like sorting, searching, filtering. Combining both we get
+powerful plugin system.
+
+Plugin classes are hardcoded and cannot be modified by users directly. But
+users can modify database instances linked to those hardcoded plugins. Thats
+why you should always trust database instances, but no hardcoded plugins,
+because users can change some thing in database and expects to see those
+changes in his web site.
+
+Plugin and plugin models, both has ``name`` and ``title`` attributes, but you
+should always use these attributes from model instances, but not from plugins.
+
+Here is example to illustrate this::
+
+    BAD:
+
+    plugin = MyPlugin()
+    print(plugin.title)
+
+    GOOD:
+
+    plugin = MyPlugin()
+    if plugin.is_active():
+        print(plugin.get_model().title)
+
+As you see, in GOOD example, we also check if a plugin is active. Users can
+enable or disable plugins using admin. Thats why you should always check if a
+plugin is active, before using it. Using methods like ``get_plugins`` and
+``get_plugins_qs`` you will always get only active plugins. So checking if
+plugin is active is needed only if you working with particular plugin, bet not
+with all plugins of a point.
 
 ``get_plugins`` method of each plugin point class and plugin point model
-instance, returns list of plugins instances.
+instance, returns list of all active plugin instances.
 
-Example, how to use plugins::
+Example, how to use it::
 
-    from my_app.plugin_points import MyPluginPoint
+    from my_app.plugins import MyPluginPoint
 
     @register.inclusion_tag('templatetags/actions.html', takes_context=True)
     def my_plugins(context):
@@ -112,27 +149,26 @@ Example, how to use plugins::
         {% endfor %}
     </ul>
 
-If you need to order or filter plugins, you can always access them via Django
-models::
+If you need to sort or filter plugins, you should always access them via Django
+ORM::
 
-    from plugins.models import PluginPoint
-    from my_app.plugin_points import MyPluginPoint
+    from my_app.plugins import MyPluginPoint
 
     @render_to('my_app/my_template.html')
     def my_view(request):
-        point = PluginPoint.objects.get_point(MyPluginPoint)
-        plugins = point.plugin_set.order_by('name')
-        return {'plugins': plugins}
+        return {
+            'plugins': MyPluginPoint.get_plugins_qs().order_by('name')
+        }
 
-Fields
-------
+Model fields
+------------
 
 You can tie your models with plugins. Using example below, plugins can be
 assigned to model instances::
 
     from django.db import models
-    from plugins.fields import PluginField
-    from my_app.plugin_points import MyPluginPoint
+    from django.contrib.plugins.fields import PluginField
+    from my_app.plugins import MyPluginPoint
 
     class MyModel(models.Model):
         plugin = PluginField(MyPluginPoint)
@@ -140,6 +176,35 @@ assigned to model instances::
 
 Also there is ``ManyPluginField``, for many-to-many relation.
 
+Form fields
+-----------
+
+It's easy to put your plugin point to forms using set of plugin fields for
+forms::
+
+    from django import forms
+    from django.contrib.plugins.fields import (
+            PluginChoiceField, PluginMultipleChoiceField,
+            PluginModelChoiceField, PluginModelMultipleChoiceField,
+        )
+    from my_app.plugins import MyPluginPoint
+
+    class MyForm(forms.Form):
+        # Two field below provides simple ChoiceField with choices of plugins.
+        choice = PluginChoiceField(MyPluginPoint)
+        multiple_choice = PluginMultipleChoiceField(MyPluginPoint)
+
+        # These two fields below provides ModelChoiceField with queryset of
+        # plugis.
+        model_choice = PluginModelChoiceField(MyPluginPoint)
+        model_multiple_choice = PluginModelMultipleChoiceField(MyPluginPoint)
+
+Here, ``ChoiceField`` type fields will provide ``choices`` of plugin ``name``
+and ``title``::
+
+    (('my-plugin-1', 'My plugin 1'),
+     ('my-plugin-2', 'My plugin 2'),
+     ('my-plugin-3', 'My plugin 3'))
 
 Urls
 ----
@@ -147,7 +212,7 @@ Urls
 ``django-plugins`` has build-in possibility to include urls from plugins. Here
 is example how this can be done::
 
-    from django.conf.urls.defaults import *
+    from django.conf.urls.defaults import patterns
     from plugins.utils import include_plugins
     from my_app.plugin_points import MyPluginPoint
 
@@ -155,19 +220,65 @@ is example how this can be done::
         (r'^plugin/', include_plugins(MyPluginPoint)),
     )
 
-``include_plugins`` function will search ``urls`` and ``name`` properties in
-all plugins, and if both is available, then will provided urls will be
-included. Example plugin::
+``include_plugins`` function will search ``get_urls`` and ``name`` attributes
+in all plugins, and if both are available, then provided urls will be included.
+
+Example plugin::
 
     class MyPluginWithUrls(MyPluginPoint):
         name = 'my-plugin'
-        urls = patterns('my_app.views',
-                (r'create/$', 'my_view', {}, 'my-app-create'),
-            )
+        title = 'My plugin'
+
+        def get_urls(self):
+            return patterns('my_app.views',
+                    url(r'create/$', 'create', name='my-app-create'),
+                    url(r'read/$', 'read', name='my-app-read'),
+                    url(r'update/$', 'update', name='my-app-update'),
+                    url(r'delete/$', 'delete', name='my-app-delete'),
+                )
 
 With this plugin, plugin point inclusion will provide these urls::
 
     plugin/my-plugin/create
+    plugin/my-plugin/read
+    plugin/my-plugin/update
+    plugin/my-plugin/delete
+
+Plugin points are better place to define urls. Here is example, how all this
+can be done::
+
+    class MyPluginPoint(object):
+        __metaclass__ = PluginMount
+
+        def get_urls(self):
+            return patterns('my_app.views',
+                    url(r'create/$', 'create',
+                        name='my-app-%s-create' % self.name),
+                )
+
+    class MyPlugin1(MyPluginPoint):
+        name = 'my-plugin-1'
+        title = 'My Plugin 1'
+
+    class MyPlugin2(MyPluginPoint):
+        name = 'my-plugin-2'
+        title = 'My Plugin 2'
+
+    class MyPlugin3(MyPluginPoint):
+        name = 'my-plugin-3'
+        title = 'My Plugin 3'
+
+From all these plugins, these urls will be available::
+
+    plugin/my-plugin-1/create
+    plugin/my-plugin-2/create
+    plugin/my-plugin-3/create
+
+In templates all these urls can be added using these url names::
+
+    {% url my-app-my-plugin-1-create %}
+    {% url my-app-my-plugin-2-create %}
+    {% url my-app-my-plugin-3-create %}
 
 
 Templates
@@ -176,12 +287,79 @@ Templates
 You can access your plugins in templates using ``get_plugins`` template tag.::
 
     {% load plugins %}
-    {% get_plugins my_app.plugin_points.MyPluginPoint as plugins %}
+    {% get_plugins my_app.plugins.MyPluginPoint as plugins %}
     <ul>
         {% for plugin in plugins %}
-        <li>{{ plugin.title }}</li>
+        <li>{{ plugin.title }} {{ plugin.get_plugin.plugin_class_attr }}</li>
         {% endfor %}
     </ul>
+
+In example above, ``get_plugins`` returns ordered queryset of plugin models,
+but not plugins directly.
+
+Using plugins with Django ORM
+-----------------------------
+
+It is possible to use plugins with Django ORM.
+
+If your model has plugin field, you can::
+
+    from my_app.models import MyModel
+    from my_app.plugins import MyPlugin
+
+    plugin_model = MyPlugin.get_model()
+
+    qs = MyModel.objects.\
+            filter(name='name', plugin=plugin_model).\
+            order_by('plugin__order')
+
+    qs = MyModel.objects.filter(plugin__name='email')
+
+As mentioned above, you can get queryset of all plugins from a plugin point
+easily::
+
+    count = MyPluginPoint.get_plugins_qs().count()
+
+How to get all plugins?
+-----------------------
+
+There are two ways, how you can get all plugins of a plugin point::
+
+    MyPluginPoint.get_plugins()
+
+and::
+
+    MyPluginPoint.get_plugins_qs()
+
+First example returns plugins directly in random order. Second example returns
+Django queryset with plugin models ordered by ``order`` field.
+
+How to get model instance of a plugin?
+--------------------------------------
+
+In example below are listed all possible ways, how you can get model instance
+of a plugin.
+
+::
+
+    plugin = MyPlugin()
+
+    # Get model instance from plugin instance.
+    plugin_model = plugin.get_model()
+
+    # Get model instance from plugin class.
+    plugin_model = MyPlugin.get_model()
+
+    # Get model instance by plugin name.
+    plugin_model = MyPluginPoint.get_model('my-plugin')
+
+How to get plugin from a model instance?
+-----------------------------------------
+
+Easy::
+
+    plugin = plugin_model.get_plugin()
+
 
 Why another plugin system?
 --------------------------
