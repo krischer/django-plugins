@@ -30,6 +30,51 @@ blog`_.
 - Possibility to access plugins from templates.
 - Many ways to access plugins and associated models.
 
+Use case
+--------
+
+``django-plugins`` can be used in those situations where instances of your
+particular model can behave differently.
+
+For example, you have one ``Node`` model::
+
+    class Node(models.Model):
+        title = models.CharField(max_length=255)
+        body = models.TextField()
+
+This model stores basic information for news, articles and other possible
+content types. Each different content type has different forms, different
+templates for displaying and listing content.
+
+To implement all this, you simply can use ``django-plugins``::
+
+    class Node(models.Model):
+        title = models.CharField(max_length=255)
+        body = models.TextField()
+        content_type = PluginField(ContentType)
+
+Then in your ``views.py`` you do::
+
+    @render_to('create.html')
+    def node_create(request, plugin):
+        return {'form': plugin.get_form()}
+
+    @render_to('update.html')
+    def node_update(request, plugin, node_id):
+        node = get_object_or_404(Node, pk=node_id)
+        return {'form': plugin.get_form(instance=node)}
+
+    @render_to()
+    def node_read(request, node_id):
+        node = get_object_or_404(Node, pk=node_id)
+        plugin = node.content_type.get_plugin()
+        return {
+            'TEMPLATE': plugin.get_template(),
+            'plugin': plugin,
+            'node': node,
+        }
+
+
 How to use it in your app?
 --------------------------
 
@@ -190,7 +235,7 @@ forms::
     from my_app.plugins import MyPluginPoint
 
     class MyForm(forms.Form):
-        # Two field below provides simple ChoiceField with choices of plugins.
+        # Two fields below provides simple ChoiceField with choices of plugins.
         choice = PluginChoiceField(MyPluginPoint)
         multiple_choice = PluginMultipleChoiceField(MyPluginPoint)
 
