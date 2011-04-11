@@ -1,18 +1,19 @@
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from . import PluginMount
-from .models import Plugin, PluginPoint
+from .point import PluginMount, PluginPoint
+from .models import Plugin, PluginPoint as PluginPointModel
 from .models import ENABLED, REMOVED
 from .management.commands.syncplugins import SyncPlugins
 
 
-class MyPluginPoint:
-    __metaclass__ = PluginMount
+class MyPluginPoint(PluginPoint):
+    pass
 
 
 class MyPlugin(MyPluginPoint):
     pass
+
 
 class MyPluginFull(MyPluginPoint):
     name = 'my-plugin-full'
@@ -22,10 +23,10 @@ class MyPluginFull(MyPluginPoint):
 class PluginSyncTestCaseBase(TestCase):
     def delete_plugins_from_db(self):
         Plugin.objects.all().delete()
-        PluginPoint.objects.all().delete()
+        PluginPointModel.objects.all().delete()
 
     def prepate_query_sets(self):
-        self.points = PluginPoint.objects.filter(
+        self.points = PluginPointModel.objects.filter(
                         name='djangoplugins.tests.MyPluginPoint')
         self.plugins = Plugin.objects.filter(
                         name='djangoplugins.tests.MyPlugin')
@@ -100,8 +101,8 @@ class PluginModels(TestCase):
 
     def test_plugin_point_model(self):
         point_name = 'djangoplugins.tests.MyPluginPoint'
-        point = PluginPoint.objects.get(name=point_name)
+        point = PluginPointModel.objects.get(name=point_name)
         self.assertEqual(point_name, unicode(point))
 
     def test_plugins_of_plugin(self):
-        self.assertRaises(PluginPoint.DoesNotExist, MyPlugin.get_plugins_qs)
+        self.assertRaises(PluginPointModel.DoesNotExist, MyPlugin.get_plugins_qs)

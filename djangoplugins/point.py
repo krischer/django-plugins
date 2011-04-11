@@ -1,5 +1,12 @@
-from .models import PluginPoint
+from .models import PluginPoint as PluginPointModel
 from .utils import get_plugin_name
+
+_PLUGIN_POINT = "<class 'djangoplugins.point.PluginPoint'>"
+
+
+def is_plugin_point(cls):
+    return repr(cls.__base__) == _PLUGIN_POINT
+
 
 class PluginMount(type):
     """
@@ -11,18 +18,18 @@ class PluginMount(type):
 
     def __new__(meta, class_name, bases, class_dict):
         cls = type.__new__(meta, class_name, bases, class_dict)
-        if class_dict.get('__metaclass__', None) == PluginMount:
+        if is_plugin_point(cls):
             PluginMount.points.append(cls)
         return cls
 
     def __init__(cls, name, bases, attrs):
-        if not hasattr(cls, 'plugins'):
+        if is_plugin_point(cls):
             # This branch only executes when processing the mount point itself.
             # So, since this is a new plugin type, not an implementation, this
             # class shouldn't be registered as a plugin. Instead, it sets up a
             # list where plugins can be registered later.
             cls.plugins = []
-        else:
+        elif hasattr(cls, 'plugins'):
             # This must be a plugin implementation, which should be registered.
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
@@ -45,5 +52,9 @@ class PluginMount(type):
                 print(plugin_instance.get_plugin().name)
 
         """
-        instance = PluginPoint.objects.get(name=get_plugin_name(cls))
+        instance = PluginPointModel.objects.get(name=get_plugin_name(cls))
         return instance.plugin_set.all()
+
+
+class PluginPoint(object):
+    __metaclass__ = PluginMount

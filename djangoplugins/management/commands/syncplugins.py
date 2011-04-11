@@ -2,8 +2,8 @@ from optparse import make_option
 
 from django.core.management.base import NoArgsCommand
 
-from djangoplugins import PluginMount
-from djangoplugins.utils import get_plugin_name
+from djangoplugins.point import PluginMount
+from djangoplugins.utils import get_plugin_name, load_plugins
 from djangoplugins.models import Plugin, PluginPoint, REMOVED, ENABLED
 
 
@@ -34,6 +34,7 @@ class SyncPlugins():
     """
 
     def __init__(self, delete_removed=False, verbosity=1):
+        load_plugins()
         self.delete_removed = delete_removed
         self.verbosity = verbosity
 

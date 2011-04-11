@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls.defaults import include, patterns
 from django.utils.importlib import import_module
 
@@ -37,3 +38,11 @@ def get_plugin_by_name(point, name):
         if hasattr(plugin, 'name') and plugin.name == name:
             return plugin
     return None
+
+
+def load_plugins():
+    for app in settings.INSTALLED_APPS:
+        try:
+            import_module('%s.plugins' % app)
+        except ImportError:
+            pass
