@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from plugins.utils import get_plugin_name, get_plugin_from_string
+from .utils import get_plugin_name, get_plugin_from_string
 
 ENABLED = 0
 DISABLED = 1
@@ -39,9 +39,6 @@ class PluginManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
-    def natural_key(self):
-        return (self.name,)
-
 
 class Plugin(models.Model):
     point = models.ForeignKey(PluginPoint)
@@ -60,6 +57,9 @@ class Plugin(models.Model):
         if hasattr(plugin, 'title'):
             return unicode(plugin.title)
         return self.name
+
+    def natural_key(self):
+        return (self.name,)
 
     def get_plugin(self):
         plugin_class = get_plugin_from_string(self.name)

@@ -1,7 +1,7 @@
 from django.db import models
 
-from plugins.models import Plugin
-from plugins.utils import get_plugin_name
+from .models import Plugin
+from .utils import get_plugin_name
 
 
 class PluginField(models.ForeignKey):

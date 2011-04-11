@@ -2,9 +2,9 @@ from optparse import make_option
 
 from django.core.management.base import NoArgsCommand
 
-from plugins import PluginMount
-from plugins.utils import get_plugin_name
-from plugins.models import Plugin, PluginPoint, REMOVED, ENABLED
+from djangoplugins import PluginMount
+from djangoplugins.utils import get_plugin_name
+from djangoplugins.models import Plugin, PluginPoint, REMOVED, ENABLED
 
 
 class Command(NoArgsCommand):

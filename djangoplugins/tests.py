@@ -1,9 +1,10 @@
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
-from plugins import PluginMount
-from plugins.models import Plugin, PluginPoint
-from plugins.models import ENABLED, REMOVED
-from plugins.management.commands.syncplugins import SyncPlugins
+from . import PluginMount
+from .models import Plugin, PluginPoint
+from .models import ENABLED, REMOVED
+from .management.commands.syncplugins import SyncPlugins
 
 
 class MyPluginPoint:
@@ -13,6 +14,10 @@ class MyPluginPoint:
 class MyPlugin(MyPluginPoint):
     pass
 
+class MyPluginFull(MyPluginPoint):
+    name = 'my-plugin-full'
+    title = _('My Plugin Full')
+
 
 class PluginSyncTestCaseBase(TestCase):
     def delete_plugins_from_db(self):
@@ -21,9 +26,9 @@ class PluginSyncTestCaseBase(TestCase):
 
     def prepate_query_sets(self):
         self.points = PluginPoint.objects.filter(
-                        name='plugins.tests.MyPluginPoint')
+                        name='djangoplugins.tests.MyPluginPoint')
         self.plugins = Plugin.objects.filter(
-                        name='plugins.tests.MyPlugin')
+                        name='djangoplugins.tests.MyPlugin')
 
 
 class PluginSyncTestCase(PluginSyncTestCaseBase):
@@ -79,9 +84,24 @@ class PluginSyncRemovedTestCase(PluginSyncTestCaseBase):
 
 class PluginModels(TestCase):
     def test_plugins_of_point(self):
-        plugin = Plugin.objects.get(name='plugins.tests.MyPlugin')
         qs = MyPluginPoint.get_plugins_qs()
-        self.assertEqual(qs[0].id, plugin.id)
+        self.assertEqual(2, qs.count())
+
+    def test_plugin_model(self):
+        plugin_name = 'djangoplugins.tests.MyPlugin'
+        plugin = Plugin.objects.get(name=plugin_name)
+        self.assertEqual(plugin_name, unicode(plugin))
+        self.assertEqual((plugin_name,), plugin.natural_key())
+
+    def test_plugin_model_full(self):
+        plugin_name = 'djangoplugins.tests.MyPluginFull'
+        plugin = Plugin.objects.get(name=plugin_name)
+        self.assertEqual(_('My Plugin Full'), unicode(plugin))
+
+    def test_plugin_point_model(self):
+        point_name = 'djangoplugins.tests.MyPluginPoint'
+        point = PluginPoint.objects.get(name=point_name)
+        self.assertEqual(point_name, unicode(point))
 
     def test_plugins_of_plugin(self):
         self.assertRaises(PluginPoint.DoesNotExist, MyPlugin.get_plugins_qs)

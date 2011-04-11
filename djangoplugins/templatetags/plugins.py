@@ -1,8 +1,6 @@
-from __future__ import absolute_import
-
 from django.template import Library, Node, TemplateSyntaxError
 
-from plugins.utils import get_plugin_from_string
+from ..utils import get_plugin_from_string
 
 register = Library()
 
