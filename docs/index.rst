@@ -83,15 +83,15 @@ folder.
 
 Example how to register a plugin point::
 
-    from django.contrib.plugins import PluginMount
+    from djangoplugins.point import PluginPoint
 
-    class MyPluginPoint(object):
+    class MyPluginPoint(PluginPoint):
         """
         Documentation, that describes how plugins can implement this plugin
         point.
 
         """
-        __metaclass__ = PluginMount
+        pass
 
 
 Example, how to register plugin, that implements ``MyPluginPoint``, defined
@@ -140,7 +140,7 @@ There are many ways how you can use plugins and plugin points. Out of the box
 plugins are stored as python objects and synchronized to database called plugin
 models.
 
-Each plugin is linked to one record of ``django.contrib.plugins.models.Plugin``
+Each plugin is linked to one record of ``djangoplugins.models.Plugin``
 model. Plugins provides all login, plugin models provides all database
 possibilities, like sorting, searching, filtering. Combining both we get
 powerful plugin system.
@@ -212,7 +212,7 @@ You can tie your models with plugins. Using example below, plugins can be
 assigned to model instances::
 
     from django.db import models
-    from django.contrib.plugins.fields import PluginField
+    from djangoplugins.fields import PluginField
     from my_app.plugins import MyPluginPoint
 
     class MyModel(models.Model):
@@ -228,7 +228,7 @@ It's easy to put your plugin point to forms using set of plugin fields for
 forms::
 
     from django import forms
-    from django.contrib.plugins.fields import (
+    from djangoplugins.fields import (
             PluginChoiceField, PluginMultipleChoiceField,
             PluginModelChoiceField, PluginModelMultipleChoiceField,
         )
@@ -284,17 +284,15 @@ Example plugin::
 
 With this plugin, plugin point inclusion will provide these urls::
 
-    plugin/my-plugin/create
-    plugin/my-plugin/read
-    plugin/my-plugin/update
-    plugin/my-plugin/delete
+    /plugin/my-plugin/create/
+    /plugin/my-plugin/read/
+    /plugin/my-plugin/update/
+    /plugin/my-plugin/delete/
 
 Plugin points are better place to define urls. Here is example, how all this
 can be done::
 
-    class MyPluginPoint(object):
-        __metaclass__ = PluginMount
-
+    class MyPluginPoint(PluginPoint):
         def get_urls(self):
             return patterns('my_app.views',
                     url(r'create/$', 'create',
@@ -315,9 +313,9 @@ can be done::
 
 From all these plugins, these urls will be available::
 
-    plugin/my-plugin-1/create
-    plugin/my-plugin-2/create
-    plugin/my-plugin-3/create
+    /plugin/my-plugin-1/create/
+    /plugin/my-plugin-2/create/
+    /plugin/my-plugin-3/create/
 
 In templates all these urls can be added using these url names::
 
