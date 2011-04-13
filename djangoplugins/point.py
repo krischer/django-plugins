@@ -1,4 +1,6 @@
-from .models import PluginPoint as PluginPointModel
+from django.utils.translation import ugettext_lazy as _
+
+from .models import Plugin, PluginPoint as PluginPointModel, ENABLED
 from .utils import get_plugin_name
 
 _PLUGIN_POINT = "<class 'djangoplugins.point.PluginPoint'>"
@@ -35,13 +37,79 @@ class PluginMount(type):
             # track of it later.
             cls.plugins.append(cls)
 
-    def get_plugins(cls, *args, **kwargs):
+
+class PluginPoint(object):
+    __metaclass__ = PluginMount
+
+    @classmethod
+    def is_active(cls):
+        if is_plugin_point(cls):
+            raise Exception(_('This method is only available to plugin '
+                              'classes.'))
+        else:
+            return cls.get_model().is_active()
+
+
+    @classmethod
+    def get_model(cls, name=None):
+        """
+        Returns model instance of plugin point or plugin, depending from which
+        class this methos is called.
+
+        Example::
+
+            plugin_model_instance = MyPlugin.get_model()
+            plugin_model_instance = MyPluginPoint.get_model('plugin-name')
+            plugin_point_model_instance = MyPluginPoint.get_model()
+
+        """
+        ppath = get_plugin_name(cls)
+        if is_plugin_point(cls):
+            if name is not None:
+                return Plugin.objects.get(point__pythonpath=ppath,
+                                          name=name)
+            else:
+                return PluginPointModel.objects.get(pythonpath=ppath)
+        else:
+            return Plugin.objects.get(pythonpath=ppath)
+
+    @classmethod
+    def get_point(cls):
+        """
+        Returns plugin point model instance. Only used from plugin classes.
+        """
+        if is_plugin_point(cls):
+            raise Exception(_('This method is only available to plugin '
+                              'classes.'))
+        else:
+            return cls.__base__
+
+    @classmethod
+    def get_point_model(cls):
+        """
+        Returns plugin point model instance. Only used from plugin classes.
+        """
+        if is_plugin_point(cls):
+            raise Exception(_('This method is only available to plugin '
+                              'classes.'))
+        else:
+            return PluginPointModel.objects.\
+                    get(plugin__pythonpath=get_plugin_name(cls))
+
+    @classmethod
+    def get_plugins(cls):
         """
         Returns all plugin instances of plugin point, passing all args and
         kwargs to plugin constructor.
         """
-        return [p(*args, **kwargs) for p in cls.plugins]
+        if is_plugin_point(cls):
+            for plugin_model in cls.get_plugins_qs():
+                yield plugin_model.get_plugin()
+        else:
+            raise Exception(_('This method is only available to plugin point '
+                              'classes.'))
 
+    @classmethod
     def get_plugins_qs(cls):
         """
         Returns query set of all plugins belonging to plugin point.
@@ -52,9 +120,26 @@ class PluginMount(type):
                 print(plugin_instance.get_plugin().name)
 
         """
-        instance = PluginPointModel.objects.get(name=get_plugin_name(cls))
-        return instance.plugin_set.all()
+        if is_plugin_point(cls):
+            point_pythonpath = get_plugin_name(cls)
+            return Plugin.objects.filter(point__pythonpath=point_pythonpath,
+                                         status=ENABLED)
+        else:
+            raise Exception(_('This method is only available to plugin point '
+                              'classes.'))
 
+    @classmethod
+    def get_name(cls):
+        if is_plugin_point(cls):
+            raise Exception(_('This method is only available to plugin '
+                              'classes.'))
+        else:
+            return cls.get_model().name
 
-class PluginPoint(object):
-    __metaclass__ = PluginMount
+    @classmethod
+    def get_title(cls):
+        if is_plugin_point(cls):
+            raise Exception(_('This method is only available to plugin '
+                              'classes.'))
+        else:
+            return cls.get_model().title

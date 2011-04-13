@@ -396,6 +396,9 @@ of a plugin.
     # Get model instance by plugin name.
     plugin_model = MyPluginPoint.get_model('my-plugin')
 
+    # Get model instance of a plugin point:
+    plugin_point_model = MyPluginPoint.get_model()
+
 How to get plugin from a model instance?
 -----------------------------------------
 
