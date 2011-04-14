@@ -221,6 +221,27 @@ assigned to model instances::
 
 Also there is ``ManyPluginField``, for many-to-many relation.
 
+PluginField
+~~~~~~~~~~~
+
+.. class:: PluginField(point, [**options])
+
+This field is simply foreign key to ``Plugin`` model.
+
+Takes one extra required argument:
+
+.. attribute:: ForeignKey.point
+
+    Plugin point class.
+
+
+ManyPluginField
+~~~~~~~~~~~~~~~
+
+.. class:: ManyPluginField(point, [**options])
+
+Takes one extra required argument, ``point``, as for ``PluginField``.
+
 Form fields
 -----------
 
@@ -237,19 +258,86 @@ forms::
     class MyForm(forms.Form):
         # Two fields below provides simple ChoiceField with choices of plugins.
         choice = PluginChoiceField(MyPluginPoint)
-        multiple_choice = PluginMultipleChoiceField(MyPluginPoint)
+        # This field currently disabled:
+        #   http://code.djangoproject.com/ticket/9161
+        #multiple_choice = PluginMultipleChoiceField(MyPluginPoint)
 
         # These two fields below provides ModelChoiceField with queryset of
         # plugis.
         model_choice = PluginModelChoiceField(MyPluginPoint)
         model_multiple_choice = PluginModelMultipleChoiceField(MyPluginPoint)
 
-Here, ``ChoiceField`` type fields will provide ``choices`` of plugin ``name``
-and ``title``::
+PluginChoiceField
+~~~~~~~~~~~~~~~~~
+.. class:: PluginChoiceField(**kwargs)
 
-    (('my-plugin-1', 'My plugin 1'),
-     ('my-plugin-2', 'My plugin 2'),
-     ('my-plugin-3', 'My plugin 3'))
+    * Default widget: ``Select``
+    * Empty value: ``''`` (an empty string)
+    * Normalizes to: Plugin object.
+    * Validates that the given value is valid plugin name of specified plugin
+      point.
+    * Error message keys: ``required``, ``invalid_choice``
+
+This field can be used, when you want to validate if a string is valid plugin
+name and that plugin belongs to specified plugin point.
+
+Also this field normalizes to plugin object instance, but not to plugin model
+instance.
+
+Takes one extra required argument:
+
+.. attribute:: PluginChoiceField.point
+
+    Plugin point class.
+
+
+PluginMultipleChoiceField
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+    Currently this field is disabled due bug in Django:
+
+        http://code.djangoproject.com/ticket/9161
+
+.. class:: PluginMultipleChoiceField(**kwargs)
+
+    * Default widget: ``SelectMultiple``
+    * Empty value: ``[]`` (an empty list)
+    * Normalizes to: A list of Plugin objects.
+    * Validates that every value in the given list of values is valid plugin
+      name of specified plugin point.
+    * Error message keys: ``required``, ``invalid_choice``, ``invalid_list``
+
+Takes one extra required argument, ``point``, as for ``PluginChoiceField``.
+
+PluginModelChoiceField
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: PluginModelChoiceField(**kwargs)
+
+    * Default widget: ``Select``
+    * Empty value: ``None``
+    * Normalizes to: A Plugin model instance.
+    * Validates that the given id is plugin id of specified plugin point.
+    * Error message keys: ``required``, ``invalid_choice``
+
+Takes one extra required argument, ``point``, as for ``PluginChoiceField``.
+
+PluginModelMultipleChoiceField
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: PluginModelMultipleChoiceField(**kwargs)
+
+    * Default widget: ``SelectMultiple``
+    * Empty value: ``[]`` (an empty list)
+    * Normalizes to: A list of Plugin model instances.
+    * Validates that every id in the given list of values is plugin id of
+      specified plugin point.
+    * Error message keys: ``required``, ``list``, ``invalid_choice``,
+      ``invalid_pk_value``
+
+Takes one extra required argument, ``point``, as for ``PluginChoiceField``.
 
 Urls
 ----
