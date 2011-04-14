@@ -8,7 +8,7 @@ from .utils import get_plugin_name
 class PluginField(models.ForeignKey):
     def __init__(self, point, **kwargs):
         kwargs['limit_choices_to'] = {
-            'point__name': get_plugin_name(point),
+            'point__pythonpath': get_plugin_name(point),
         }
         super(PluginField, self).__init__(Plugin, **kwargs)
 
@@ -16,7 +16,7 @@ class PluginField(models.ForeignKey):
 class ManyPluginField(models.ManyToManyField):
     def __init__(self, point, **kwargs):
         kwargs['limit_choices_to'] = {
-            'point__name': get_plugin_name(point),
+            'point__pythonpath': get_plugin_name(point),
         }
         super(ManyPluginField, self).__init__(Plugin, **kwargs)
 
