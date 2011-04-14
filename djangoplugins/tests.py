@@ -148,6 +148,12 @@ class PluginsTest(TestCase):
 
         self.assertRaises(Exception, MyPluginPoint.get_point_model)
 
+    def test_get_point(self):
+        point = MyPluginFull.get_point()
+        self.assertTrue(point is MyPluginPoint)
+
+        self.assertRaises(Exception, MyPluginPoint.get_point)
+
     def test_get_plugin(self):
         model = MyPluginFull.get_model()
         plugin = model.get_plugin()

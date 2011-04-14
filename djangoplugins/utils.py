@@ -29,17 +29,6 @@ def include_plugins(point):
     return include(patterns('', *urls))
 
 
-def get_plugin_by_name(point, name):
-    """
-    Return plugin by plugin name defined in plugin class.
-
-    """
-    for plugin in point.get_plugins():
-        if hasattr(plugin, 'name') and plugin.name == name:
-            return plugin
-    return None
-
-
 def load_plugins():
     for app in settings.INSTALLED_APPS:
         try:

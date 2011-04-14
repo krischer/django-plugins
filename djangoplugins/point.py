@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Plugin, PluginPoint as PluginPointModel, ENABLED
 from .utils import get_plugin_name
@@ -36,6 +37,8 @@ class PluginMount(type):
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
             cls.plugins.append(cls)
+
+    DoesNotExist = ObjectDoesNotExist
 
 
 class PluginPoint(object):

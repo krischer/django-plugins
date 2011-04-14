@@ -487,6 +487,14 @@ of a plugin.
     # Get model instance of a plugin point:
     plugin_point_model = MyPluginPoint.get_model()
 
+``get_model`` method can raise ``ObjectDoesNotExist`` exception, so you should
+check it::
+
+    try:
+        plugin_model = MyPlugin.get_model()
+    except MyPlugin.DoesNotExist:
+        plugin_model = None
+
 How to get plugin from a model instance?
 -----------------------------------------
 
