@@ -42,6 +42,10 @@ class PluginPoint(object):
     __metaclass__ = PluginMount
 
     @classmethod
+    def get_pythonpath(cls):
+        return get_plugin_name(cls)
+
+    @classmethod
     def is_active(cls):
         if is_plugin_point(cls):
             raise Exception(_('This method is only available to plugin '
@@ -63,7 +67,7 @@ class PluginPoint(object):
             plugin_point_model_instance = MyPluginPoint.get_model()
 
         """
-        ppath = get_plugin_name(cls)
+        ppath = cls.get_pythonpath()
         if is_plugin_point(cls):
             if name is not None:
                 return Plugin.objects.get(point__pythonpath=ppath,
@@ -94,7 +98,7 @@ class PluginPoint(object):
                               'classes.'))
         else:
             return PluginPointModel.objects.\
-                    get(plugin__pythonpath=get_plugin_name(cls))
+                    get(plugin__pythonpath=cls.get_pythonpath())
 
     @classmethod
     def get_plugins(cls):
@@ -121,9 +125,10 @@ class PluginPoint(object):
 
         """
         if is_plugin_point(cls):
-            point_pythonpath = get_plugin_name(cls)
+            point_pythonpath = cls.get_pythonpath()
             return Plugin.objects.filter(point__pythonpath=point_pythonpath,
-                                         status=ENABLED)
+                                         status=ENABLED).\
+                                  order_by('index')
         else:
             raise Exception(_('This method is only available to plugin point '
                               'classes.'))

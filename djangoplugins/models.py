@@ -21,12 +21,13 @@ class PluginPointManager(models.Manager):
 
 class PluginPoint(models.Model):
     pythonpath = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=ENABLED)
 
     objects = PluginPointManager()
 
     def __unicode__(self):
-        return self.pythonpath
+        return self.title
 
 
 class PluginManager(models.Manager):

@@ -86,6 +86,10 @@ class SyncPlugins():
         dst = self.get_instances_dict(PluginPoint.objects.all())
 
         for point, inst in self.available(src, dst, PluginPoint):
+            if hasattr(point, '_title'):
+                inst.title = point._title
+            else:
+                inst.title = inst.pythonpath.split('.')[-1]
             inst.save()
             self.plugins(point, inst)
 
