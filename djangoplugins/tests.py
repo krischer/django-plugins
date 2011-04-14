@@ -117,7 +117,7 @@ class PluginModelsTest(TestCase):
     def test_plugin_point_model(self):
         point_name = 'djangoplugins.tests.MyPluginPoint'
         point = PluginPointModel.objects.get(pythonpath=point_name)
-        self.assertEqual(point_name, unicode(point))
+        self.assertEqual('MyPluginPoint', unicode(point))
 
     def test_plugins_of_plugin(self):
         self.assertRaises(Exception, MyPlugin.get_plugins_qs)
