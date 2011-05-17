@@ -34,7 +34,6 @@ def include_plugins(point):
 def load_plugins():
     for app in settings.INSTALLED_APPS:
         try:
-            print('%s.plugins' % app)
             import_module('%s.plugins' % app)
         except ImportError as e:
             # If module exists but still can't be imported it means, that there
