@@ -12,6 +12,13 @@ class PluginField(models.ForeignKey):
         }
         super(PluginField, self).__init__(Plugin, **kwargs)
 
+    def south_field_triple(self):
+        "Returns a suitable description of this field for South."
+        from south.modelsinspector import introspector
+        field_class = self.__class__.__module__ + "." + self.__class__.__name__
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
+
 
 class ManyPluginField(models.ManyToManyField):
     def __init__(self, point, **kwargs):
@@ -19,6 +26,13 @@ class ManyPluginField(models.ManyToManyField):
             'point__pythonpath': get_plugin_name(point),
         }
         super(ManyPluginField, self).__init__(Plugin, **kwargs)
+
+    def south_field_triple(self):
+        "Returns a suitable description of this field for South."
+        from south.modelsinspector import introspector
+        field_class = self.__class__.__module__ + "." + self.__class__.__name__
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
 
 
 def get_plugins_qs(point):
