@@ -17,6 +17,11 @@ class PluginField(models.ForeignKey):
         from south.modelsinspector import introspector
         field_class = self.__class__.__module__ + "." + self.__class__.__name__
         args, kwargs = introspector(self)
+        if 'to' in kwargs:
+            kwargs['point'] = kwargs['to']
+            del kwargs['to']
+        else:
+            kwargs['point'] = "orm['djangoplugins.Plugin']"
         return (field_class, args, kwargs)
 
 
@@ -32,6 +37,11 @@ class ManyPluginField(models.ManyToManyField):
         from south.modelsinspector import introspector
         field_class = self.__class__.__module__ + "." + self.__class__.__name__
         args, kwargs = introspector(self)
+        if 'to' in kwargs:
+            kwargs['point'] = kwargs['to']
+            del kwargs['to']
+        else:
+            kwargs['point'] = "orm['djangoplugins.Plugin']"
         return (field_class, args, kwargs)
 
 
