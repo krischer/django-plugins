@@ -9,3 +9,4 @@ Documentation
 
 Source code:
     https://bitbucket.org/sirex/django-plugins
+

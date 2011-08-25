@@ -1,7 +1,8 @@
 syntax:glob
+
+*.egg-info/
 *.pyc
-build/lib.linux-i686-2.6/
+build
 dist/
-django_plugins.egg-info/
 djangoenv/
 docs/build/

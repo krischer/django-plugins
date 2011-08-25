@@ -21,6 +21,8 @@ setup(name='django-plugins',
       license='LGPL',
       description='django-plugins.',
       long_description=read_docs('README.rst')+read_docs('CHANGES.rst'),
+      include_package_data=True,
+      zip_safe=False,
       classifiers = [
           'Development Status :: 5 - Production/Stable',
           'Environment :: Web Environment',
