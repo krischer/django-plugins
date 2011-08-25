@@ -1,7 +1,14 @@
+import os.path
 from setuptools import setup, find_packages
 
+
+def read_docs(filename):
+    path = os.path.join(os.path.dirname(__file__), filename)
+    return open(path).read()
+
+
 setup(name='django-plugins',
-      version='0.2',
+      version='0.2.1',
       author='Mantas Zimnickas',
       author_email='sirexas@gmail.com',
       packages=find_packages(),
@@ -13,7 +20,7 @@ setup(name='django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
       license='LGPL',
       description='django-plugins.',
-      long_description=open('README.rst').read()+open('CHANGES.rst').read(),
+      long_description=read_docs('README.rst')+read_docs('CHANGES.rst'),
       classifiers = [
           'Development Status :: 5 - Production/Stable',
           'Environment :: Web Environment',
