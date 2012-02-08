@@ -58,7 +58,7 @@ class PluginPoint(object):
 
 
     @classmethod
-    def get_model(cls, name=None):
+    def get_model(cls, name=None, status=ENABLED):
         """
         Returns model instance of plugin point or plugin, depending from which
         class this methos is called.
@@ -73,8 +73,11 @@ class PluginPoint(object):
         ppath = cls.get_pythonpath()
         if is_plugin_point(cls):
             if name is not None:
+                kwargs = {}
+                if status is not None:
+                    kwargs['status'] = status
                 return Plugin.objects.get(point__pythonpath=ppath,
-                                          name=name)
+                                          name=name, **kwargs)
             else:
                 return PluginPointModel.objects.get(pythonpath=ppath)
         else:

@@ -171,6 +171,11 @@ class PluginsTest(TestCase):
         self.assertFalse(MyPluginFull.is_active())
         self.assertEqual(2, MyPluginPoint.get_plugins_qs().count())
         self.assertEqual(2, len(list(MyPluginPoint.get_plugins())))
+        self.assertRaises(Plugin.DoesNotExist,
+                          lambda: MyPluginPoint.get_model('my-plugin-full'))
+
+        plugin_model = MyPluginPoint.get_model('my-plugin-full', status=None)
+        self.assertEqual('my-plugin-full', plugin_model.name)
 
     def test_get_meta(self):
         self.assertEqual('my-plugin-full', MyPluginFull.get_name())
