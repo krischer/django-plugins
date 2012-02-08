@@ -2,6 +2,12 @@
 Changes
 *******
 
+0.2.2 (2012-02-08)
+==================
+
+- Improved ``PluginPoint.get_model()`` method, now this method also checks if
+  plugin is enabled.
+
 0.2.1 (2011-08-25)
 ==================
 

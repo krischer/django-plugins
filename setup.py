@@ -8,10 +8,10 @@ def read_docs(filename):
 
 
 setup(name='django-plugins',
-      version='0.2.1',
+      version='0.2.2',
       author='Mantas Zimnickas',
       author_email='sirexas@gmail.com',
-      packages=find_packages(),
+      packages=find_packages(exclude=['sample-project']),
       install_requires=[
           'distribute',
           'django',
@@ -22,6 +22,7 @@ setup(name='django-plugins',
       description='django-plugins.',
       long_description=read_docs('README.rst')+read_docs('CHANGES.rst'),
       include_package_data=True,
+      exclude_package_data={'': ['sample-project']},
       zip_safe=False,
       classifiers = [
           'Development Status :: 5 - Production/Stable',
