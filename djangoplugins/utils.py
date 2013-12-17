@@ -1,7 +1,11 @@
 from os.path import join, exists, dirname
 
 from django.conf import settings
-from django.conf.urls.defaults import include, patterns
+import django
+if float("%d.%d"%(django.VERSION[0],django.VERSION[1])) <= 1.5:
+    from django.conf.urls.defaults import include, patterns
+else:    
+    from django.conf.urls import include, patterns
 from django.utils.importlib import import_module
 
 
