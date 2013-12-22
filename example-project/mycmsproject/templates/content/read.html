@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<a href="{% url 'index' %}">Home</a> |
+<a href="{{ plugin.get_list_url }}">List {{ plugin.title }}</a> |
+<a href="{{ plugin.get_create_url }}">Create {{ plugin.title }}</a>
+<hr>
+
+<h1>{{ content.title }}</h1>
+
+<div>
+  {{ content.content }}
+</div>
+{% endblock %}

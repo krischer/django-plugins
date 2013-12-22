@@ -2,6 +2,23 @@
 Changes
 *******
 
+0.2.3 (2013-12-22)
+==================
+
+- Django 1.6 support, thanks Felipe Ćlvarez for this.
+
+- Added example-project to show how to use ``django-plugins``.
+
+- Added possibility for ``include_plugins`` to specify more than one list of
+  url patterns with possibility to customise inclusion url pattern.
+
+- ``include_plugins`` now automatically provides ``plugin`` argument to view
+  functions.
+
+- Now it is possible to get plugin instance from plugon point like this:
+  ``MyPluginPoint.get_plugin('plugon-name')``.
+
+
 0.2.2 (2012-02-08)
 ==================
 

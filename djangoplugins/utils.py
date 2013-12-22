@@ -1,11 +1,14 @@
 from os.path import join, exists, dirname
 
-from django.conf import settings
 import django
-if float("%d.%d"%(django.VERSION[0],django.VERSION[1])) <= 1.5:
+
+from django.conf import settings
+
+if django.VERSION <= (1, 5):
     from django.conf.urls.defaults import include, patterns
-else:    
+else:
     from django.conf.urls import include, patterns
+
 from django.utils.importlib import import_module
 
 
@@ -27,12 +30,18 @@ def get_plugin_from_string(plugin_name):
     return getattr(module, classname)
 
 
-def include_plugins(point):
-    urls = []
+def include_plugins(point, pattern=r'{plugin}/', urls='urls'):
+    pluginurls = []
     for plugin in point.get_plugins():
-        if hasattr(plugin, 'urls') and hasattr(plugin, 'name'):
-            urls.append((r'%s/' % (plugin.name), include(plugin.urls)))
-    return include(patterns('', *urls))
+        if hasattr(plugin, urls) and hasattr(plugin, 'name'):
+            _urls = getattr(plugin, urls)
+            for url in _urls:
+                url.default_args['plugin'] = plugin.name
+            pluginurls.append((
+                pattern.format(plugin=plugin.name),
+                include(_urls)
+            ))
+    return include(patterns('', *pluginurls))
 
 
 def load_plugins():

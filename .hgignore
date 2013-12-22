@@ -6,3 +6,9 @@ build
 dist/
 djangoenv/
 docs/build/
+example-project/bin/
+example-project/db.sqlite3
+example-project/include/
+example-project/lib/
+example-project/local/
+example-project/share/

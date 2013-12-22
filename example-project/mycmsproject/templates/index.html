@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load plugins %}
+
+
+{% block content %}
+<h1>Available plugins for Content Type</h1>
+{% get_plugins mycmsproject.plugins.ContentType as contenttypes %}
+<ul>
+    {% for plugin in contenttypes %}
+    <li><a href="{{ plugin.get_list_url }}">{{ plugin.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

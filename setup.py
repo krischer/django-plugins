@@ -8,12 +8,11 @@ def read_docs(filename):
 
 
 setup(name='django-plugins',
-      version='0.2.2',
+      version='0.2.3',
       author='Mantas Zimnickas',
       author_email='sirexas@gmail.com',
       packages=find_packages(exclude=['sample-project']),
       install_requires=[
-          'distribute',
           'django',
       ],
       url='https://bitbucket.org/sirex/django-plugins',

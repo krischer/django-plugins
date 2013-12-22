@@ -84,6 +84,10 @@ class PluginPoint(object):
             return Plugin.objects.get(pythonpath=ppath)
 
     @classmethod
+    def get_plugin(cls, name=None, status=ENABLED):
+        return cls.get_model(name, status).get_plugin()
+
+    @classmethod
     def get_point(cls):
         """
         Returns plugin point model instance. Only used from plugin classes.
