@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 
 from .utils import get_plugin_name, get_plugin_from_string
 
@@ -19,6 +20,7 @@ class PluginPointManager(models.Manager):
         return self.get(pythonpath=get_plugin_name(point))
 
 
+@python_2_unicode_compatible
 class PluginPoint(models.Model):
     pythonpath = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
@@ -26,9 +28,8 @@ class PluginPoint(models.Model):
 
     objects = PluginPointManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
-
 
 class PluginManager(models.Manager):
     def get_plugin(self, plugin):
@@ -42,6 +43,7 @@ class PluginManager(models.Manager):
         return self.get(pythonpath=name)
 
 
+@python_2_unicode_compatible
 class Plugin(models.Model):
     """
     Database representation of a plugin.
@@ -80,7 +82,7 @@ class Plugin(models.Model):
         order_with_respect_to = 'point'
         ordering = ('index', 'id')
 
-    def __unicode__(self):
+    def __str__(self):
         if self.title:
             return self.title
         if self.name:

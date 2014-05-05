@@ -1,8 +1,11 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 
+import six
+
 from .models import Plugin, PluginPoint as PluginPointModel, ENABLED
 from .utils import get_plugin_name
+
 
 _PLUGIN_POINT = "<class 'djangoplugins.point.PluginPoint'>"
 
@@ -41,9 +44,7 @@ class PluginMount(type):
     DoesNotExist = ObjectDoesNotExist
 
 
-class PluginPoint(object):
-    __metaclass__ = PluginMount
-
+class PluginPoint(six.with_metaclass(PluginMount, object)):
     @classmethod
     def get_pythonpath(cls):
         return get_plugin_name(cls)

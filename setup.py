@@ -14,6 +14,7 @@ setup(name='django-plugins',
       packages=find_packages(exclude=['sample-project']),
       install_requires=[
           'django',
+          'six'
       ],
       url='https://bitbucket.org/sirex/django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
