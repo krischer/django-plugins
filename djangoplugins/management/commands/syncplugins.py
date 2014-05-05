@@ -12,7 +12,8 @@ from djangoplugins.models import Plugin, PluginPoint, REMOVED, ENABLED
 class Command(NoArgsCommand):
     option_list = NoArgsCommand.option_list + (
         make_option('--delete', action='store_true', dest='delete',
-            help='delete the REMOVED Plugin and PluginPoint instances. '),
+                    help='delete the REMOVED Plugin and PluginPoint '
+                    'instances. '),
     )
     help = ("Syncs the registered plugins and plugin points with the model "
             "versions.")
@@ -59,7 +60,7 @@ class SyncPlugins():
             inst = dst.pop(name, None)
             if inst is None:
                 self.print_(1, "Registering %s for %s" % (model.__name__,
-                                                            name))
+                                                          name))
                 inst = model(pythonpath=name)
             if inst.status == REMOVED:
                 self.print_(1, "Updating %s for %s" % (model.__name__, name))

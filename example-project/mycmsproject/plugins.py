@@ -6,11 +6,13 @@ from djangoplugins.point import PluginPoint
 
 
 class ContentType(PluginPoint):
-    urls = patterns('mycmsproject.views',
+    urls = patterns(
+        'mycmsproject.views',
         url(r'^$', 'content_list', name='content-list'),
         url(r'^create/$', 'content_create', name='content-create'),
     )
-    instance_urls = patterns('mycmsproject.views',
+    instance_urls = patterns(
+        'mycmsproject.views',
         url(r'^$', 'content_read', name='content-read'),
     )
 

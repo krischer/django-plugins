@@ -57,7 +57,6 @@ class PluginPoint(six.with_metaclass(PluginMount, object)):
         else:
             return cls.get_model().is_active()
 
-
     @classmethod
     def get_model(cls, name=None, status=ENABLED):
         """
@@ -109,7 +108,7 @@ class PluginPoint(six.with_metaclass(PluginMount, object)):
                               'classes.'))
         else:
             return PluginPointModel.objects.\
-                    get(plugin__pythonpath=cls.get_pythonpath())
+                get(plugin__pythonpath=cls.get_pythonpath())
 
     @classmethod
     def get_plugins(cls):
@@ -139,7 +138,7 @@ class PluginPoint(six.with_metaclass(PluginMount, object)):
             point_pythonpath = cls.get_pythonpath()
             return Plugin.objects.filter(point__pythonpath=point_pythonpath,
                                          status=ENABLED).\
-                                  order_by('index')
+                order_by('index')
         else:
             raise Exception(_('This method is only available to plugin point '
                               'classes.'))

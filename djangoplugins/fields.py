@@ -53,7 +53,7 @@ class PluginChoiceField(forms.ModelChoiceField):
     def __init__(self, point, *args, **kwargs):
         kwargs['to_field_name'] = 'name'
         super(PluginChoiceField, self).\
-                __init__(queryset=get_plugins_qs(point), *args, **kwargs)
+            __init__(queryset=get_plugins_qs(point), *args, **kwargs)
 
     def to_python(self, value):
         value = super(PluginChoiceField, self).to_python(value)
@@ -69,16 +69,16 @@ class PluginMultipleChoiceField(forms.ModelMultipleChoiceField):
     def __init__(self, point, *args, **kwargs):
         kwargs['to_field_name'] = 'name'
         super(PluginMultipleChoiceField, self).\
-                __init__(queryset=get_plugins_qs(point), *args, **kwargs)
+            __init__(queryset=get_plugins_qs(point), *args, **kwargs)
 
 
 class PluginModelChoiceField(forms.ModelChoiceField):
     def __init__(self, point, *args, **kwargs):
         super(PluginModelChoiceField, self).\
-                __init__(queryset=get_plugins_qs(point), *args, **kwargs)
+            __init__(queryset=get_plugins_qs(point), *args, **kwargs)
 
 
 class PluginModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     def __init__(self, point, *args, **kwargs):
         super(PluginModelMultipleChoiceField, self).\
-                __init__(queryset=get_plugins_qs(point), *args, **kwargs)
+            __init__(queryset=get_plugins_qs(point), *args, **kwargs)

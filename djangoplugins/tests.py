@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 import six
 
 from .fields import PluginChoiceField, PluginModelChoiceField, \
-                    PluginModelMultipleChoiceField
+    PluginModelMultipleChoiceField
 from .point import PluginMount, PluginPoint
 from .models import Plugin, PluginPoint as PluginPointModel
 from .models import ENABLED, DISABLED, REMOVED
@@ -37,9 +37,9 @@ class PluginSyncTestCaseBase(TestCase):
 
     def prepate_query_sets(self):
         self.points = PluginPointModel.objects.filter(
-                        pythonpath='djangoplugins.tests.MyPluginPoint')
+            pythonpath='djangoplugins.tests.MyPluginPoint')
         self.plugins = Plugin.objects.filter(
-                        pythonpath='djangoplugins.tests.MyPlugin')
+            pythonpath='djangoplugins.tests.MyPlugin')
 
 
 class PluginSyncTestCase(PluginSyncTestCaseBase):
@@ -67,7 +67,6 @@ class PluginSyncTestCase(PluginSyncTestCaseBase):
         plugin_model = MyPluginPoint.get_model('my-plugin-full')
         self.assertEqual('djangoplugins.tests.MyPluginFull',
                          plugin_model.pythonpath)
-
 
 
 class PluginSyncRemovedTestCase(PluginSyncTestCaseBase):
@@ -194,17 +193,17 @@ class MyTestForm(forms.Form):
     plugin_choice = PluginChoiceField(MyPluginPoint)
     model_choice = PluginModelChoiceField(MyPluginPoint)
 
-    #plugin_multi_choice = PluginMultipleChoiceField(MyPluginPoint)
+    # plugin_multi_choice = PluginMultipleChoiceField(MyPluginPoint)
     model_multi_choice = PluginModelMultipleChoiceField(MyPluginPoint)
 
 
 class PluginsFieldsTest(TestCase):
     def test_validation(self):
         form = MyTestForm({
-                'plugin_choice': 'my-plugin-2',
-                'model_choice': '%d' % MyPlugin2.get_model().id,
-        #        'plugin_multi_choice': ['my-plugin-2'],
-                'model_multi_choice': ['%d' % MyPlugin2.get_model().id],
+            'plugin_choice': 'my-plugin-2',
+            'model_choice': '%d' % MyPlugin2.get_model().id,
+            # 'plugin_multi_choice': ['my-plugin-2'],
+            'model_multi_choice': ['%d' % MyPlugin2.get_model().id],
             })
         self.assertTrue(form.is_valid())
 

@@ -24,12 +24,13 @@ setup(name='django-plugins',
       include_package_data=True,
       exclude_package_data={'': ['sample-project']},
       zip_safe=False,
-      classifiers = [
+      classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Web Environment',
           'Framework :: Django',
           'Intended Audience :: Developers',
-          'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
+          'License :: OSI Approved :: '
+          'GNU Library or Lesser General Public License (LGPL)',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
           'Topic :: Software Development :: Libraries :: Python Modules',

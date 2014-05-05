@@ -9,11 +9,13 @@ from .forms import ContentForm
 def index(request):
     return render(request, 'index.html')
 
+
 def content_list(request, plugin):
     return render(request, 'content/list.html', dict(
         plugin=ContentType.get_plugin(plugin),
         posts=Content.objects.all(),
     ))
+
 
 def content_create(request, plugin):
     plugin = ContentType.get_plugin(plugin)
@@ -29,6 +31,7 @@ def content_create(request, plugin):
     return render(request, 'content/form.html', dict(
         form=form,
     ))
+
 
 def content_read(request, pk, plugin):
     plugin = ContentType.get_plugin(plugin)

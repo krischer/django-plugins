@@ -31,6 +31,7 @@ class PluginPoint(models.Model):
     def __str__(self):
         return self.title
 
+
 class PluginManager(models.Manager):
     def get_plugin(self, plugin):
         return self.get(pythonpath=get_plugin_name(plugin))

@@ -4,7 +4,8 @@ from djangoplugins.utils import include_plugins
 
 from .plugins import ContentType
 
-urlpatterns = patterns('mycmsproject.views',
+urlpatterns = patterns(
+    'mycmsproject.views',
     url(r'^$', 'index', name='index'),
     url(r'^content/', include_plugins(ContentType)),
     url(r'^content/', include_plugins(
