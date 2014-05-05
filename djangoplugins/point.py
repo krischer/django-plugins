@@ -1,7 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
-
-import six
+from django.utils import six
 
 from .models import Plugin, PluginPoint as PluginPointModel, ENABLED
 from .utils import get_plugin_name

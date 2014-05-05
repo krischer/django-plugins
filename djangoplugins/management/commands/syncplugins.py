@@ -1,8 +1,7 @@
 from optparse import make_option
 
 from django.core.management.base import NoArgsCommand
-
-import six
+from django.utils import six
 
 from djangoplugins.point import PluginMount
 from djangoplugins.utils import get_plugin_name, load_plugins

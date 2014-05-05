@@ -1,8 +1,7 @@
 from django import forms
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
-
-import six
+from django.utils import six
 
 from .fields import PluginChoiceField, PluginModelChoiceField, \
     PluginModelMultipleChoiceField
