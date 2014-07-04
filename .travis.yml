@@ -10,4 +10,4 @@ env:
 install:
   - pip install -q Django==$DJANGO_VERSION
 script:
-  - cd $TRAVIS_BUILD_DIR/example_project; python manage.py test djangoplugins
+  - cd $TRAVIS_BUILD_DIR/example-project; python manage.py test djangoplugins
