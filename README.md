@@ -8,5 +8,5 @@ Documentation
     http://packages.python.org/django-plugins/
 
 Source code:
-    https://bitbucket.org/sirex/django-plugins
+    https://github.com/krischer/django-plugins
 
