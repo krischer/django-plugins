@@ -1,16 +1,21 @@
-Welcome to django-plugins's documentation!
-==========================================
+Documentation for django-plugins
+================================
+
+
+.. contents:: Page Contents
+   :local:
+   :depth: 2
+
 
 Introduction
 ------------
 
-``django-plugins`` will help you to make your Django app more reusable. You
-will be able to define plugin points, plugins and various ways, how plugins can
-be integrated to your base app and extended from other apps providing plugins.
+``django-plugins`` will help you make your Django app more reusable. You will
+be able to define plugin points, plugins and various ways, how plugins can be
+integrated to your base app and extended from other apps providing plugins.
 
-The idea for ``django-plugins`` was taken from `Marty Alchin blog`_, for in
-deep understanding about how this plugin system work, read `Marty Alchin
-blog`_.
+The idea for ``django-plugins`` was taken from `Marty Alchin blog`_, for a deep
+understanding about how this plugin system work, read `Marty Alchin blog`_.
 
 .. _Marty Alchin blog: http://martyalchin.com/2008/jan/10/simple-plugin-framework/
 
@@ -74,12 +79,22 @@ Then in your ``views.py`` you do::
             'node': node,
         }
 
-
 How to use it in your app?
 --------------------------
 
-All plugin points and plugins live in ``plugins.py`` file in your django app
-folder.
+``django-plugins`` has currently been tested with Python **2.7**, **3.2**,
+**3.3**, and **3.4** along with Django version **1.5.8** and **1.6.5**. It
+might well work with other versions.
+
+Installation works via ``pip``:
+
+.. code-block:: bash
+
+    $ pip install django-plugins
+
+
+All plugin points and plugins live in the ``plugins.py`` file in your django
+app folder.
 
 Example how to register a plugin point::
 
@@ -94,7 +109,7 @@ Example how to register a plugin point::
         pass
 
 
-Example, how to register plugin, that implements ``MyPluginPoint``, defined
+Example how to register the plugin that implements ``MyPluginPoint``, defined
 above::
 
     class MyPlugin1(MyPluginPoint):
@@ -114,7 +129,7 @@ properties are used everywhere in plugin system.
 ``title``
     Any human readable title for plugin. Value of this attribute will be shown
     to users everywhere.
-    
+
 
 Database
 --------
@@ -293,12 +308,6 @@ Takes one extra required argument:
 
 PluginMultipleChoiceField
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. note::
-
-    Currently this field is disabled due bug in Django:
-
-        http://code.djangoproject.com/ticket/9161
 
 .. class:: PluginMultipleChoiceField(**kwargs)
 

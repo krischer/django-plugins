@@ -63,8 +63,6 @@ class PluginChoiceField(forms.ModelChoiceField):
             return value
 
 
-# This field works only with Django 1.3 and greather:
-#   http://code.djangoproject.com/ticket/9161
 class PluginMultipleChoiceField(forms.ModelMultipleChoiceField):
     def __init__(self, point, *args, **kwargs):
         kwargs['to_field_name'] = 'name'
