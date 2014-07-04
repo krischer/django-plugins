@@ -21,6 +21,6 @@ Source code:
 
 Installation works via `pip`:
 
-```python
+```bash
 $ pip install django-plugins
 ```
