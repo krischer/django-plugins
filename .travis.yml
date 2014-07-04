@@ -9,5 +9,6 @@ env:
   - DJANGO_VERSION=1.6.5
 install:
   - pip install -q Django==$DJANGO_VERSION
+  - pip install .
 script:
   - cd $TRAVIS_BUILD_DIR/example-project; python manage.py test djangoplugins
