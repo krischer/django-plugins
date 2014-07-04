@@ -1,18 +1,15 @@
 ## django-plugins
 
-[![Build Status](https://travis-ci.org/krischer/django-plugins.svg?branch=master)](https://travis-ci.org/krischer/django-plugins)
+[![Build Status](https://travis-ci.org/krischer/django-plugins.svg?branch=master)](https://travis-ci.org/krischer/django-plugins) || Latest version: **0.2.4**
 
 `django-plugins` provides functionality for Django apps to make them more
 reusable.
 
-Home page
-    http://pypi.python.org/pypi/django-plugins
+**Home page:** http://pypi.python.org/pypi/django-plugins
 
-Documentation
-    http://packages.python.org/django-plugins/
+**Documentation:** http://packages.python.org/django-plugins/
 
-Source code:
-    https://github.com/krischer/django-plugins
+**Source code:** https://github.com/krischer/django-plugins
 
 ### Installation
 
