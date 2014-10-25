@@ -9,6 +9,8 @@ def read_docs(filename):
 long_description = \
 """``django-plugins`` provides functionality for Django apps to make them more reusable.
 
+Originally developed by Mantas Zimnickas (sirexas@gmail.com).
+
 
 Home page
     http://pypi.python.org/pypi/django-plugins
@@ -22,12 +24,12 @@ Source code:
 long_description += read_docs('CHANGES.rst')
 
 setup(name='django-plugins',
-      version='0.2.4',
-      author='Mantas Zimnickas',
-      author_email='sirexas@gmail.com',
+      version='0.2.5',
+      author='Lion Krischer',
+      author_email='lion.krischer@googlemail.com',
       packages=find_packages(exclude=['sample-project']),
       install_requires=[
-          'django>=1.5',
+          'django>=1.6',
       ],
       url='https://github.com/krischer/django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',

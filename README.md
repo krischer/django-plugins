@@ -1,6 +1,6 @@
 ## django-plugins
 
-[![Build Status](https://travis-ci.org/krischer/django-plugins.svg?branch=master)](https://travis-ci.org/krischer/django-plugins) || Latest version: **0.2.4**
+[![Build Status](https://travis-ci.org/krischer/django-plugins.svg?branch=master)](https://travis-ci.org/krischer/django-plugins) || Latest version: **0.2.5**
 
 `django-plugins` provides functionality for Django apps to make them more
 reusable.
@@ -13,7 +13,11 @@ reusable.
 
 ### Installation
 
-`django-plugins` is currently tested with Python **2.7**, **3.2**, **3.3**, and **3.4** along with Django versions **1.5.8** and **1.6.5**. It might well work with other versions. See the [Travis build matrix](https://travis-ci.org/krischer/django-plugins) for detailed information regarding the latest master.
+`django-plugins` is currently tested with Python **2.7**, **3.2**, **3.3**, and
+**3.4** along with Django versions **1.6.8** and **1.7.1**. It might well work
+with other versions. See the [Travis build
+matrix](https://travis-ci.org/krischer/django-plugins) for detailed information
+regarding the latest master.
 
 
 Installation works via `pip`:

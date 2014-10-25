@@ -4,10 +4,7 @@ import django
 
 from django.conf import settings
 
-if django.VERSION <= (1, 5):
-    from django.conf.urls.defaults import include, patterns
-else:
-    from django.conf.urls import include, patterns
+from django.conf.urls import include, patterns
 
 from django.utils.importlib import import_module
 
