@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.2.5 (2014-10-25)
+------------------
+
+- Officially supported Django versions are now 1.6.8 and 1.7.1.
+
+
 0.2.4 (2014-07-04)
 ------------------
 
