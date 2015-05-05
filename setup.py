@@ -6,8 +6,8 @@ def read_docs(filename):
     path = os.path.join(os.path.dirname(__file__), filename)
     return open(path).read()
 
-long_description = \
-"""``django-plugins`` provides functionality for Django apps to make them more reusable.
+long_description = """
+``django-plugins`` offers functionality to make Django apps them more reusable.
 
 Originally developed by Mantas Zimnickas (sirexas@gmail.com).
 
@@ -19,7 +19,7 @@ Documentation
     http://packages.python.org/django-plugins/
 
 Source code:
-    https://github.com/krischer/django-plugins\n\n"""
+    https://github.com/krischer/django-plugins\n\n""".lstrip()
 
 long_description += read_docs('CHANGES.rst')
 

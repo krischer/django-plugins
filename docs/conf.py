@@ -101,10 +101,10 @@ html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 # theme further.
 html_theme_options = {
     # Navigation bar title. (Default: ``project`` value)
-    #'navbar_title': "Demo",
+    # 'navbar_title': "Demo",
 
     # Tab name for entire site. (Default: "Site")
-    #'navbar_site_name': "Site",
+    # 'navbar_site_name': "Site",
 
     # Render the next and previous page links in navbar. (Default: true)
     'navbar_sidebarrel': True,
@@ -268,7 +268,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'name', u'django-plugins Documentation', [u'sirex and krischer'], 1),
+    ('index', 'name', u'django-plugins Documentation',
+     [u'sirex and krischer'], 1),
 ]
 
 

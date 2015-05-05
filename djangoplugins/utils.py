@@ -1,7 +1,5 @@
 from os.path import join, exists, dirname
 
-import django
-
 from django.conf import settings
 
 from django.conf.urls import include, patterns
