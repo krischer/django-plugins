@@ -6,7 +6,7 @@ from django.conf import settings
 
 from django.conf.urls import include, patterns
 
-from django.utils.importlib import import_module
+from importlib import import_module
 
 
 def get_plugin_name(cls):
