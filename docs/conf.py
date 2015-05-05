@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'django-plugins'
-copyright = u'2010-2014, sirex and krischer'
+copyright = u'2010-2015, sirex and krischer'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -127,7 +127,7 @@ html_theme_options = {
 
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
-    'navbar_class': "navbar navbar-inverse",
+    'navbar_class': "navbar",
 
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
@@ -141,7 +141,7 @@ html_theme_options = {
     #
     # Options are nothing with "" (default) or the name of a valid theme
     # such as "amelia" or "cosmo".
-    'bootswatch_theme': "united",
+    'bootswatch_theme': "simplex",
 
     # Choose Bootstrap version.
     # Values: "3" (default) or "2" (in quotes)
