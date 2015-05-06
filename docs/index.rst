@@ -24,13 +24,13 @@ understanding about how this plugin system work, read `Marty Alchin blog`_.
 - Synchronization with database.
 - Plugin management from Django admin.
 - Model fields:
-    - ``PluginField``
-    - ``ManyPluginField``
+    - :class:`djangoplugins.fields.PluginField`
+    - :class:`djangoplugins.fields.ManyPluginField`
 - Form fields:
-    - ``PluginChoiceField``
-    - ``PluginModelChoiceField``
-    - ``PluginMultipleChoiceField``
-    - ``PluginModelMultipleChoiceField``
+    - :class:`djangoplugins.fields.PluginChoiceField`
+    - :class:`djangoplugins.fields.PluginModelChoiceField`
+    - :class:`djangoplugins.fields.PluginMultipleChoiceField`
+    - :class:`djangoplugins.fields.PluginModelMultipleChoiceField`
 - Possibility to include plugins to urls.
 - Possibility to access plugins from templates.
 - Many ways to access plugins and associated models.
@@ -156,7 +156,7 @@ There are many ways how you can use plugins and plugin points. Out of the box
 plugins are stored as python objects and synchronized to database called plugin
 models.
 
-Each plugin is linked to one record of ``djangoplugins.models.Plugin``
+Each plugin is linked to one record of :class:`djangoplugins.models.Plugin`
 model. Plugins provides all login, plugin models provides all database
 possibilities, like sorting, searching, filtering. Combining both we get
 powerful plugin system.
@@ -240,7 +240,9 @@ Also there is ``ManyPluginField``, for many-to-many relation.
 PluginField
 ~~~~~~~~~~~
 
-.. class:: PluginField(point, [**options])
+.. autoclass:: djangoplugins.fields.PluginField
+    :members:
+
 
 This field is simply foreign key to ``Plugin`` model.
 
@@ -254,7 +256,8 @@ Takes one extra required argument:
 ManyPluginField
 ~~~~~~~~~~~~~~~
 
-.. class:: ManyPluginField(point, [**options])
+.. autoclass:: djangoplugins.fields.ManyPluginField
+    :members:
 
 Takes one extra required argument, ``point``, as for ``PluginField``.
 
@@ -285,7 +288,8 @@ forms::
 
 PluginChoiceField
 ~~~~~~~~~~~~~~~~~
-.. class:: PluginChoiceField(**kwargs)
+.. autoclass:: djangoplugins.fields.PluginChoiceField
+    :members:
 
     * Default widget: ``Select``
     * Empty value: ``''`` (an empty string)
@@ -310,7 +314,8 @@ Takes one extra required argument:
 PluginMultipleChoiceField
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PluginMultipleChoiceField(**kwargs)
+.. autoclass:: djangoplugins.fields.PluginMultipleChoiceField
+    :members:
 
     * Default widget: ``SelectMultiple``
     * Empty value: ``[]`` (an empty list)
@@ -324,7 +329,8 @@ Takes one extra required argument, ``point``, as for ``PluginChoiceField``.
 PluginModelChoiceField
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PluginModelChoiceField(**kwargs)
+.. autoclass:: djangoplugins.fields.PluginModelChoiceField
+    :members:
 
     * Default widget: ``Select``
     * Empty value: ``None``
@@ -337,7 +343,8 @@ Takes one extra required argument, ``point``, as for ``PluginChoiceField``.
 PluginModelMultipleChoiceField
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PluginModelMultipleChoiceField(**kwargs)
+.. autoclass:: djangoplugins.fields.PluginModelMultipleChoiceField
+    :members:
 
     * Default widget: ``SelectMultiple``
     * Empty value: ``[]`` (an empty list)
@@ -348,6 +355,20 @@ PluginModelMultipleChoiceField
       ``invalid_pk_value``
 
 Takes one extra required argument, ``point``, as for ``PluginChoiceField``.
+
+
+Database Models
+---------------
+
+`djangoplugins` uses the following database modules:
+
+.. autoclass:: djangoplugins.models.PluginPoint
+    :members:
+
+.. autoclass:: djangoplugins.models.Plugin
+    :members:
+
+
 
 Urls
 ----
