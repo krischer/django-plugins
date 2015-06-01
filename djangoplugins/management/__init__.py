@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from django.db.models.signals import post_syncdb
 
 from djangoplugins import models as plugins_app
