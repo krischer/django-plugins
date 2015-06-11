@@ -9,6 +9,7 @@ Changes
 - Removed features that will be removed with Django 1.9.
 - Using the `syncdb` Django command is no longer recommended. Please use
   `migrate` instead.
+- Removed South migrations in favor of Django migrations.
 
 0.2.5 (2014-10-25)
 ------------------
