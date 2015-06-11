@@ -8,43 +8,31 @@ from .utils import get_plugin_name
 
 
 class PluginField(models.ForeignKey):
-    def __init__(self, point, **kwargs):
-        kwargs['limit_choices_to'] = {
-            'point__pythonpath': get_plugin_name(point),
-        }
-        super(PluginField, self).__init__(Plugin, **kwargs)
-
-    def south_field_triple(self):
-        "Returns a suitable description of this field for South."
-        from south.modelsinspector import introspector
-        field_class = self.__class__.__module__ + "." + self.__class__.__name__
-        args, kwargs = introspector(self)
-        if 'to' in kwargs:
-            kwargs['point'] = kwargs['to']
-            del kwargs['to']
+    def __init__(self, point=None, **kwargs):
+        # Normal path.
+        if point is not None:
+            kwargs['limit_choices_to'] = {
+                'point__pythonpath': get_plugin_name(point),
+            }
+        # Called during migrations.
         else:
-            kwargs['point'] = "orm['djangoplugins.Plugin']"
-        return (field_class, args, kwargs)
+            if "to" in kwargs:
+                del kwargs["to"]
+        super(PluginField, self).__init__(Plugin, **kwargs)
 
 
 class ManyPluginField(models.ManyToManyField):
-    def __init__(self, point, **kwargs):
-        kwargs['limit_choices_to'] = {
-            'point__pythonpath': get_plugin_name(point),
-        }
-        super(ManyPluginField, self).__init__(Plugin, **kwargs)
-
-    def south_field_triple(self):
-        "Returns a suitable description of this field for South."
-        from south.modelsinspector import introspector
-        field_class = self.__class__.__module__ + "." + self.__class__.__name__
-        args, kwargs = introspector(self)
-        if 'to' in kwargs:
-            kwargs['point'] = kwargs['to']
-            del kwargs['to']
+    def __init__(self, point=None, **kwargs):
+        # Normal path.
+        if point is not None:
+            kwargs['limit_choices_to'] = {
+                'point__pythonpath': get_plugin_name(point),
+                }
+        # Called during migrations.
         else:
-            kwargs['point'] = "orm['djangoplugins.Plugin']"
-        return (field_class, args, kwargs)
+            if "to" in kwargs:
+                del kwargs["to"]
+        super(ManyPluginField, self).__init__(Plugin, **kwargs)
 
 
 def get_plugins_qs(point):

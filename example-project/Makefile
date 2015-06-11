@@ -6,7 +6,7 @@ bin/python:
 	cd .. && $(CURDIR)/bin/python setup.py develop
 
 db.sqlite3:
-	bin/python manage.py syncdb --noinput
+	bin/python manage.py migrate
 
 .PHONY: run
 run:
