@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.3.x
+-----
+
+- Added support for Django 1.8.
+- Django 1.6 is no longer officially supported.
+- Removed features that will be removed with Django 1.9.
+- Using the `syncdb` Django command is no longer recommended. Please use
+  `migrate` instead.
+
 0.2.5 (2014-10-25)
 ------------------
 
