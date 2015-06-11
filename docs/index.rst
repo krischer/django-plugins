@@ -83,7 +83,7 @@ How to use it in your app?
 --------------------------
 
 ``django-plugins`` is currently tested with Python **2.7**, **3.2**, **3.3**,
-and **3.4** along with Django versions **1.7.8** and **1.8.1**. It might well
+and **3.4** along with Django versions **1.7** and **1.8**. It might well
 work with other versions. Always make sure to use the latest minor dot release
 of any Django version to enhance security and stability.
 
