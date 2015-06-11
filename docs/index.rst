@@ -12,9 +12,9 @@ Introduction
 
 ``django-plugins`` will help you make your Django app more reusable. You will
 be able to define plugin points, plugins and various ways, how plugins can be
-integrated to your base app and extended from other apps providing plugins.
+integrated with your base app and extended from other apps providing plugins.
 
-The idea for ``django-plugins`` was taken from `Marty Alchin blog`_, for a deep
+The idea for ``django-plugins`` was taken from `Marty Alchin blog`_; for a deep
 understanding about how this plugin system work, read `Marty Alchin blog`_.
 
 .. _Marty Alchin blog: http://martyalchin.com/2008/jan/10/simple-plugin-framework/
@@ -136,7 +136,7 @@ Database
 --------
 
 All defined plugins and plugin points are synchronized to database using Django
-management command ``syncplugins`` or ``syncdb``. ``syncdb`` should be always
+management command ``syncplugins`` or ``migrate``. ``migrate`` should be always
 enough, but some times, if you added or changed plugins code and need to update
 those changes to database, but don't want anything more, then you should use
 ``syncplugins`` management command.
