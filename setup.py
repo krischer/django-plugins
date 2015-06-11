@@ -24,12 +24,12 @@ Source code:
 long_description += read_docs('CHANGES.rst')
 
 setup(name='django-plugins',
-      version='0.2.5',
+      version='0.3.x',
       author='Lion Krischer',
       author_email='lion.krischer@googlemail.com',
       packages=find_packages(exclude=['sample-project']),
       install_requires=[
-          'django>=1.6',
+          'django>=1.7',
       ],
       url='https://github.com/krischer/django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
