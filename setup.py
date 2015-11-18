@@ -29,7 +29,7 @@ setup(name='django-plugins',
       author_email='lion.krischer@googlemail.com',
       packages=find_packages(exclude=['sample-project']),
       install_requires=[
-          'django>=1.7',
+          'django>=1.6',
       ],
       url='https://github.com/krischer/django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
