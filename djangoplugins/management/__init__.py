@@ -1,6 +1,12 @@
 from __future__ import absolute_import
 
-from django.db.models.signals import post_migrate, post_syncdb
+try:
+    from django.db.models.signals import post_migrate
+except ImportError:
+    from south.signals import post_migrate
+
+from django.db.models.signals import post_syncdb
+
 
 from djangoplugins import models as plugins_app
 from .commands.syncplugins import SyncPlugins
