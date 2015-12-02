@@ -25,3 +25,24 @@ Installation works via `pip`:
 ```bash
 $ pip install django-plugins
 ```
+
+
+### Signals
+
+There are two registered signals with Django that you might use for hooking event handlers in case a django plugin gets disabled or enabled at a certain point.
+
+Example
+
+```python
+from django.dispatch.dispatcher import receiver
+
+
+@receiver(django_plugin_enabled)
+def _django_plugin_enabled(sender, plugin, **kwargs):
+    enable_plugin(plugin)
+    
+@receiver(django_plugin_disabled)
+def _django_plugin_disabled(sender, plugin, **kwargs):
+    disable_plugin(plugin)
+
+```
