@@ -35,7 +35,7 @@ Example
 
 ```python
 from django.dispatch.dispatcher import receiver
-
+from djangoplugins.signals import django_plugin_disabled, django_plugin_enabled
 
 @receiver(django_plugin_enabled)
 def _django_plugin_enabled(sender, plugin, **kwargs):
