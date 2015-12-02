@@ -1,9 +1,10 @@
 from __future__ import absolute_import
 
+from dirtyfields import DirtyFieldsMixin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
-
+from djangoplugins.signals import django_plugin_enabled, django_plugin_disabled
 from .utils import get_plugin_name, get_plugin_from_string
 
 ENABLED = 0
@@ -15,6 +16,9 @@ STATUS_CHOICES = (
     (DISABLED, _('Disabled')),
     (REMOVED,  _('Removed')),
 )
+
+STATUS_CHOICES_ENABLED = (ENABLED,)
+STATUS_CHOICES_DISABLED = (DISABLED, REMOVED,)
 
 
 class PluginPointManager(models.Manager):
@@ -47,7 +51,7 @@ class PluginManager(models.Manager):
 
 
 @python_2_unicode_compatible
-class Plugin(models.Model):
+class Plugin(DirtyFieldsMixin, models.Model):
     """
     Database representation of a plugin.
 
@@ -101,3 +105,14 @@ class Plugin(models.Model):
     def get_plugin(self):
         plugin_class = get_plugin_from_string(self.pythonpath)
         return plugin_class()
+
+    def save(self, *args, **kwargs):
+        if "status" in self.get_dirty_fields().keys() and self.pk:
+            if self.status in STATUS_CHOICES_ENABLED:
+                django_plugin_enabled.send(sender=self.__class__,
+                                           plugin=self.get_plugin())
+            else:
+                django_plugin_disabled.send(sender=self.__class__,
+                                            plugin=self.get_plugin())
+
+        return super(Plugin, self).save(*args, **kwargs)
