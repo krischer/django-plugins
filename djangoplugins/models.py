@@ -109,8 +109,10 @@ class Plugin(DirtyFieldsMixin, models.Model):
     def save(self, *args, **kwargs):
         if "status" in self.get_dirty_fields().keys() and self.pk:
             if self.status in STATUS_CHOICES_ENABLED:
-                django_plugin_enabled.send(sender=self.__class__, plugin=self.get_plugin())
+                django_plugin_enabled.send(sender=self.__class__,
+                                           plugin=self.get_plugin())
             else:
-                django_plugin_disabled.send(sender=self.__class__, plugin=self.get_plugin())
+                django_plugin_disabled.send(sender=self.__class__,
+                                            plugin=self.get_plugin())
 
         return super(Plugin, self).save(*args, **kwargs)
