@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from dirtyfields import DirtyFieldsMixin
+from django import VERSION as django_version
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
@@ -86,7 +87,8 @@ class Plugin(DirtyFieldsMixin, models.Model):
 
     class Meta:
         unique_together = (("point", "name"),)
-        order_with_respect_to = 'point'
+        if django_version < (1, 9):
+            order_with_respect_to = 'point'
         ordering = ('index', 'id')
 
     def __str__(self):
