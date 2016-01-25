@@ -87,7 +87,7 @@ class Plugin(DirtyFieldsMixin, models.Model):
     class Meta:
         unique_together = (("point", "name"),)
         order_with_respect_to = 'point'
-        ordering = ('index', 'id')
+        # ordering = ('index', 'id')
 
     def __str__(self):
         if self.title:
