@@ -41,6 +41,22 @@ def include_plugins(point, pattern=r'{plugin}/', urls='urls'):
     return include(patterns('', *pluginurls))
 
 
+def import_app(app_name):
+    try:
+        mod = import_module(app_name)
+    except ImportError:  # Maybe it's AppConfig
+        parts = app_name.split('.')
+        tmp_app, app_cfg_name = '.'.join(parts[:-1]), parts[-1]
+        try:
+            tmp_app = import_module(tmp_app)
+        except ImportError:
+            raise
+        mod = getattr(tmp_app, app_cfg_name).name
+        mod = import_module(mod)
+
+    return mod
+
+
 def load_plugins():
     for app in settings.INSTALLED_APPS:
         try:
@@ -48,6 +64,6 @@ def load_plugins():
         except ImportError as e:
             # If module exists but still can't be imported it means, that there
             # is error inside plugins module.
-            mod = import_module(app)
+            mod = import_app(app)
             if exists(join(dirname(mod.__file__), 'plugins.py')):
                 raise e
