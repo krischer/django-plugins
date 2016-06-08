@@ -19,7 +19,7 @@ matrix:
           env: DJANGO_VERSION=">=1.7,<1.8"
 
 install:
-  - pip install -q Django==$DJANGO_VERSION
+  - pip install "Django${DJANGO_VERSION}"
   - pip install .
 script:
   - cd $TRAVIS_BUILD_DIR/example-project; python manage.py test djangoplugins
