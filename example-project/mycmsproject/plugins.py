@@ -6,17 +6,19 @@ from django.core.urlresolvers import reverse
 
 from djangoplugins.point import PluginPoint
 
+import mycmsproject.views
+
 
 class ContentType(PluginPoint):
-    urls = patterns(
-        'mycmsproject.views',
-        url(r'^$', 'content_list', name='content-list'),
-        url(r'^create/$', 'content_create', name='content-create'),
-    )
-    instance_urls = patterns(
-        'mycmsproject.views',
-        url(r'^$', 'content_read', name='content-read'),
-    )
+    urls = [
+        url(r'^$', mycmsproject.views.content_list, name='content-list'),
+        url(r'^create/$', mycmsproject.views.content_create,
+            name='content-create')
+    ]
+
+    instance_urls = [
+        url(r'^$', mycmsproject.views.content_read, name='content-read')
+    ]
 
     def get_list_url(self):
         return reverse('content-list')

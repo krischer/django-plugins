@@ -4,7 +4,7 @@ from django.db import models
 
 from djangoplugins.fields import PluginField
 
-from .plugins import ContentType
+from mycmsproject.plugins import ContentType
 
 
 class Content(models.Model):
