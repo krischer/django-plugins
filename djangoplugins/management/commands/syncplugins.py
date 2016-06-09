@@ -2,11 +2,12 @@ from __future__ import absolute_import
 
 from optparse import make_option
 
+from django import VERSION as django_version
 from django.core.management.base import NoArgsCommand
 from django.utils import six
 
 from djangoplugins.point import PluginMount
-from djangoplugins.utils import get_plugin_name, load_plugins
+from djangoplugins.utils import get_plugin_name, load_plugins, db_table_exists
 from djangoplugins.models import Plugin, PluginPoint, REMOVED, ENABLED
 
 
@@ -119,4 +120,14 @@ class SyncPlugins():
         """
         Synchronize all registered plugins and plugin points to database.
         """
+        # Django >= 1.9 changed something with the migration logic causing
+        # plugins to be executed before the corresponding database tables
+        # exist. This method will only return something if the database
+        # tables have already been created.
+        # XXX: I don't fully understand the issue and there should be
+        # another way but this appears to work fine.
+        if django_version >= (1, 9) and (
+                not db_table_exists(Plugin._meta.db_table) or
+                not db_table_exists(PluginPoint._meta.db_table)):
+            return
         self.points()

@@ -1,11 +1,12 @@
 from __future__ import absolute_import
 
+from django import VERSION as django_version
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import six
 
 from .models import Plugin, PluginPoint as PluginPointModel, ENABLED
-from .utils import get_plugin_name
+from .utils import get_plugin_name, db_table_exists
 
 
 _PLUGIN_POINT = "<class 'djangoplugins.point.PluginPoint'>"
@@ -117,6 +118,16 @@ class PluginPoint(six.with_metaclass(PluginMount, object)):
         Returns all plugin instances of plugin point, passing all args and
         kwargs to plugin constructor.
         """
+        # Django >= 1.9 changed something with the migration logic causing
+        # plugins to be executed before the corresponding database tables
+        # exist. This method will only return something if the database
+        # tables have already been created.
+        # XXX: I don't fully understand the issue and there should be
+        # another way but this appears to work fine.
+        if django_version >= (1, 9) and \
+                not db_table_exists(Plugin._meta.db_table):
+            return []
+
         if is_plugin_point(cls):
             for plugin_model in cls.get_plugins_qs():
                 yield plugin_model.get_plugin()

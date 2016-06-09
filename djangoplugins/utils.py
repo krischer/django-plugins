@@ -2,8 +2,8 @@ from __future__ import absolute_import
 
 from os.path import join, exists, dirname
 
+from django.db import connection
 from django.conf import settings
-
 from django.conf.urls import include, patterns
 
 from importlib import import_module
@@ -51,3 +51,7 @@ def load_plugins():
             mod = import_module(app)
             if exists(join(dirname(mod.__file__), 'plugins.py')):
                 raise e
+
+
+def db_table_exists(table_name):
+    return table_name in connection.introspection.table_names()
