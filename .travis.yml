@@ -27,4 +27,9 @@ script:
   # First run the tests.
   - cd $TRAVIS_BUILD_DIR/example-project; python manage.py test djangoplugins
   # Now make sure that migrations don't fail.
-  - cd $TRAVIS_BUILD_DIR/example-project; python manage.py migrate
+  - cd $TRAVIS_BUILD_DIR/example-project
+  - if [ ${DJANGO_VERSION} == DJANGO_VERSION=">=1.6,<1.7" ];
+    # manage.py migrate was not available on older django versions.
+    then python manage.py syncdb; else
+    python manage.py migrate;
+    fi
