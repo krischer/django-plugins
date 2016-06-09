@@ -9,30 +9,28 @@ from .utils import get_plugin_name
 
 class PluginField(models.ForeignKey):
     def __init__(self, point=None, *args, **kwargs):
-        # Normal path.
+
+        # If not migrating, add a new fields.
         if point is not None:
             kwargs['limit_choices_to'] = {
-                'point__pythonpath': get_plugin_name(point),
+                'point__pythonpath': get_plugin_name(point)
             }
-        # Called during migrations.
-        else:
-            if "to" in kwargs:
-                del kwargs["to"]
-        super(PluginField, self).__init__(Plugin, *args, **kwargs)
+
+        super(PluginField, self).__init__(
+            to=kwargs.pop("to", Plugin), *args, **kwargs)
 
 
 class ManyPluginField(models.ManyToManyField):
     def __init__(self, point=None, *args, **kwargs):
-        # Normal path.
+
+        # If not migrating, add a new fields.
         if point is not None:
             kwargs['limit_choices_to'] = {
-                'point__pythonpath': get_plugin_name(point),
-                }
-        # Called during migrations.
-        else:
-            if "to" in kwargs:
-                del kwargs["to"]
-        super(ManyPluginField, self).__init__(Plugin, *args, **kwargs)
+                'point__pythonpath': get_plugin_name(point)
+            }
+
+        super(ManyPluginField, self).__init__(
+            to=kwargs.pop("to", Plugin), *args, **kwargs)
 
 
 def get_plugins_qs(point):
