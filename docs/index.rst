@@ -401,7 +401,7 @@ Urls
 is example how this can be done::
 
     from django.conf.urls.defaults import patterns
-    from plugins.utils import include_plugins
+    from djangoplugins.utils import include_plugins
     from my_app.plugin_points import MyPluginPoint
 
     urlpatterns = patterns('wora.views',
