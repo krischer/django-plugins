@@ -1,7 +1,5 @@
 from __future__ import absolute_import
 
-from os.path import join, exists, dirname
-
 from django.db import connection
 from django.conf import settings
 from django.conf.urls import include, patterns
@@ -61,12 +59,8 @@ def load_plugins():
     for app in settings.INSTALLED_APPS:
         try:
             import_module('%s.plugins' % app)
-        except ImportError as e:
-            # If module exists but still can't be imported it means, that there
-            # is error inside plugins module.
-            mod = import_app(app)
-            if exists(join(dirname(mod.__file__), 'plugins.py')):
-                raise e
+        except ImportError:
+            import_app(app)
 
 
 def db_table_exists(table_name):
