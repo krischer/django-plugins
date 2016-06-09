@@ -19,6 +19,9 @@ def content_list(request, plugin):
 
 
 def content_create(request, plugin):
+    # Break circular import
+    import mycmsproject.forms
+
     plugin = mycmsproject.plugins.ContentType.get_plugin(plugin)
     if request.method == 'POST':
         form = mycmsproject.forms.ContentForm(request.POST)
