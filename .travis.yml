@@ -24,4 +24,7 @@ install:
   - pip install "Django${DJANGO_VERSION}"
   - pip install .
 script:
+  # First run the tests.
   - cd $TRAVIS_BUILD_DIR/example-project; python manage.py test djangoplugins
+  # Now make sure that migrations don't fail.
+  - cd $TRAVIS_BUILD_DIR/example-project; python manage.py migrate
