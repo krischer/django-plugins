@@ -29,7 +29,7 @@ script:
   # Now make sure that migrations don't fail.
   - cd $TRAVIS_BUILD_DIR/example-project
   # manage.py migrate was not available on older django versions.
-  - if [ ${DJANGO_VERSION} == DJANGO_VERSION=">=1.6,<1.7" ];
+  - if [ ${DJANGO_VERSION} == ">=1.6,<1.7" ];
     then python manage.py syncdb; else
     python manage.py migrate;
     fi
