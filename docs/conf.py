@@ -17,9 +17,12 @@ import sphinx_bootstrap_theme
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('..'))
+# Make sure the docs can be properly built.
+import django
 from django.conf import settings
-settings.configure()
+sys.path.insert(0, os.path.abspath('..'))
+settings.configure(INSTALLED_APPS=["djangoplugins"])
+django.setup()
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
