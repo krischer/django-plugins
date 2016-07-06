@@ -1,15 +1,15 @@
 Changes
 =======
 
-0.3.x
------
+0.3.0 (2016-07-06)
+------------------
 
-- Added support for Django 1.8.
-- Django 1.6 is no longer officially supported.
-- Removed features that will be removed with Django 1.9.
+- Added support for Django 1.8 and 1.9.
+- Now works for Django 1.6-1.9 and Python 2.7, 3.3, 3.4, and 3.5
 - Using the `syncdb` Django command is no longer recommended. Please use
   `migrate` instead.
-- Removed South migrations in favor of Django migrations.
+- Supports django migrations as well as a backwards compatible path for
+  south migrations.
 
 0.2.5 (2014-10-25)
 ------------------

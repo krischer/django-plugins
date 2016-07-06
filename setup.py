@@ -24,7 +24,7 @@ Source code:
 long_description += read_docs('CHANGES.rst')
 
 setup(name='django-plugins',
-      version='0.3.x',
+      version='0.3.0',
       author='Lion Krischer',
       author_email='lion.krischer@googlemail.com',
       packages=find_packages(exclude=['sample-project']),
