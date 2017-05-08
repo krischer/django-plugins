@@ -42,6 +42,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='plugin',
-            unique_together=set([('point', 'name')]),
+            unique_together=set([('point', 'name', 'index')]),
         ),
     ]
