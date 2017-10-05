@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from django.db import connection
 from django.conf import settings
-from django.conf.urls import include, patterns
+from django.conf.urls import include, url
 
 from importlib import import_module
 
@@ -30,13 +30,13 @@ def include_plugins(point, pattern=r'{plugin}/', urls='urls'):
     for plugin in point.get_plugins():
         if hasattr(plugin, urls) and hasattr(plugin, 'name'):
             _urls = getattr(plugin, urls)
-            for url in _urls:
-                url.default_args['plugin'] = plugin.name
-            pluginurls.append((
+            for plugin_url in _urls:
+                plugin_url.default_args['plugin'] = plugin.name
+            pluginurls.append(url(
                 pattern.format(plugin=plugin.name),
                 include(_urls)
             ))
-    return include(patterns('', *pluginurls))
+    return include(pluginurls)
 
 
 def import_app(app_name):

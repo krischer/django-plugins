@@ -1,6 +1,12 @@
 Changes
 =======
 
+Fork at mikkonie/django-plugins
+-------------------------------
+
+- Modified to support Django 1.10 (tested with 1.10.8)
+
+
 0.3.0 (2016-07-06)
 ------------------
 

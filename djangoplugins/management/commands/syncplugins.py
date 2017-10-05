@@ -1,9 +1,7 @@
 from __future__ import absolute_import
 
-from optparse import make_option
-
 from django import VERSION as django_version
-from django.core.management.base import NoArgsCommand
+from django.core.management import BaseCommand
 from django.utils import six
 
 from djangoplugins.point import PluginMount
@@ -11,19 +9,22 @@ from djangoplugins.utils import get_plugin_name, load_plugins, db_table_exists
 from djangoplugins.models import Plugin, PluginPoint, REMOVED, ENABLED
 
 
-class Command(NoArgsCommand):
-    option_list = NoArgsCommand.option_list + (
-        make_option('--delete', action='store_true', dest='delete',
-                    help='delete the REMOVED Plugin and PluginPoint '
-                    'instances. '),
-    )
-    help = ("Syncs the registered plugins and plugin points with the model "
-            "versions.")
+class Command(BaseCommand):
+    help = "Syncs the registered plugins and plugin points with the model " \
+            "versions."
 
     requires_model_validation = True
 
-    def handle_noargs(self, **options):
-        sync = SyncPlugins(options.get('delete'), options.get('verbosity'))
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--delete',
+            action='store_true',
+            dest='delete',
+            default=False,
+            help="delete the REMOVED Plugin and PluginPoint instances.")
+
+    def handle(self, *args, **options):
+        sync = SyncPlugins(options['delete'], options['verbosity'])
         sync.all()
 
 
