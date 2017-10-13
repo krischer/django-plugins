@@ -50,7 +50,12 @@ def import_app(app_name):
         except ImportError:
             raise
         mod = getattr(tmp_app, app_cfg_name).name
-        mod = import_module(mod)
+
+        # Workaround for not finding app plugins modules in all cases
+        try:
+            mod = import_module('{}.plugins'.format(mod))
+        except ImportError:
+            pass
 
     return mod
 
