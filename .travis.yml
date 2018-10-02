@@ -17,9 +17,11 @@ matrix:
           env: DJANGO_VERSION=">=1.6,<1.7"
         - python: "3.5"
           env: DJANGO_VERSION=">=1.7,<1.8"
-        # Django 1.9 and Python 3.3 don't work together.
+        # Django 1.9+ and Python 3.3 don't work together.
         - python: "3.3"
           env: DJANGO_VERSION=">=1.9,<1.10"
+        - python: "3.3"
+          env: DJANGO_VERSION=">=1.10,<1.11"
 
 install:
   - pip install "Django${DJANGO_VERSION}"
