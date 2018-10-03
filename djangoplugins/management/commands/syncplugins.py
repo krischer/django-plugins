@@ -21,7 +21,8 @@ class Command(BaseCommand):
                         action='store_true',
                         dest='delete',
                         default=False,
-                        help='Delete poll instead of closing it'),
+                        help='delete the REMOVED Plugin and PluginPoint '
+                        'instances.'),
         )
 
     requires_model_validation = True
