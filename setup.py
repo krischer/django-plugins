@@ -30,7 +30,7 @@ setup(name='django-plugins',
       packages=find_packages(exclude=['sample-project']),
       install_requires=[
           'django>=1.6',
-          'django-dirtyfields',
+          'django-dirtyfields<1.3',
       ],
       url='https://github.com/krischer/django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
