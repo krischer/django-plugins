@@ -49,6 +49,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+SILENCED_SYSTEM_CHECKS = [
+    'admin.E408',
+    'admin.E409',
+    'admin.E410',
+]
+
 ROOT_URLCONF = 'mycmsproject.urls'
 
 WSGI_APPLICATION = 'mycmsproject.wsgi.application'
