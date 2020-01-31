@@ -110,7 +110,6 @@ class SyncPlugins():
         for plugin, inst in self.available(src, dst, Plugin):
             inst.point = point_inst
             inst.name = getattr(plugin, 'name', None)
-            inst.id = getattr(plugin, 'id')
             if hasattr(plugin, 'title'):
                 inst.title = six.text_type(getattr(plugin, 'title'))
             inst.save()
