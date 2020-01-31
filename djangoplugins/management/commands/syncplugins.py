@@ -107,10 +107,10 @@ class SyncPlugins():
         src = self.get_classes_dict(point.plugins)
         dst = self.get_instances_dict(point_inst.plugin_set.all())
 
-        for _i, (plugin, inst) in enumerate(self.available(src, dst, Plugin)):
+        for plugin, inst in self.available(src, dst, Plugin):
             inst.point = point_inst
             inst.name = getattr(plugin, 'name', None)
-            inst.index = _i
+            inst.id = getattr(plugin, 'id')
             if hasattr(plugin, 'title'):
                 inst.title = six.text_type(getattr(plugin, 'title'))
             inst.save()
