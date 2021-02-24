@@ -1,11 +1,10 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 from optparse import make_option
 
 from django import VERSION as django_version
 
 from django.core.management.base import BaseCommand
-from django.utils import six
 
 from djangoplugins.point import PluginMount
 from djangoplugins.utils import get_plugin_name, load_plugins, db_table_exists
@@ -70,7 +69,7 @@ class SyncPlugins():
         Iterate over all registered plugins or plugin points and prepare to add
         them to database.
         """
-        for name, point in six.iteritems(src):
+        for name, point in iter(src.items()):
             inst = dst.pop(name, None)
             if inst is None:
                 self.print_(1, "Registering %s for %s" % (model.__name__,
@@ -87,7 +86,7 @@ class SyncPlugins():
         Mark all missing plugins, that exists in database, but are not
         registered.
         """
-        for inst in six.itervalues(dst):
+        for inst in iter(dst.values()):
             if inst.status != REMOVED:
                 inst.status = REMOVED
                 inst.save()
@@ -123,7 +122,7 @@ class SyncPlugins():
             inst.point = point_inst
             inst.name = getattr(plugin, 'name', None)
             if hasattr(plugin, 'title'):
-                inst.title = six.text_type(getattr(plugin, 'title'))
+                inst.title = getattr(plugin, 'title')
             inst.save()
 
         self.missing(dst)

@@ -1,9 +1,8 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 from django import VERSION as django_version
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils import six
 
 from .models import Plugin, PluginPoint as PluginPointModel, ENABLED
 from .utils import get_plugin_name, db_table_exists
@@ -46,7 +45,7 @@ class PluginMount(type):
     DoesNotExist = ObjectDoesNotExist
 
 
-class PluginPoint(six.with_metaclass(PluginMount, object)):
+class PluginPoint(metaclass=PluginMount):
     @classmethod
     def get_pythonpath(cls):
         return get_plugin_name(cls)
