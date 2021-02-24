@@ -1,24 +1,47 @@
 language: python
+dist: xenial
+
 python:
   - "2.7"
-  - "3.3"
   - "3.4"
   - "3.5"
+  - "3.6"
 env:
   - DJANGO_VERSION=">=1.6,<1.7"
   - DJANGO_VERSION=">=1.7,<1.8"
   - DJANGO_VERSION=">=1.8,<1.9"
   - DJANGO_VERSION=">=1.9,<1.10"
+  - DJANGO_VERSION=">=1.10,<1.11"
+  - DJANGO_VERSION=">=1.11,<2.0"
+  - DJANGO_VERSION=">=2.1,<2.2"
+  - DJANGO_VERSION=">=2.2,<2.3"
 matrix:
     exclude:
+        # Python 3.4 does not work with some django versions.
+        - python: "3.4"
+          env: DJANGO_VERSION=">=1.6,<1.7"
+        - python: "3.4"
+          env: DJANGO_VERSION=">=1.7,<1.8"
         # Python 3.5 does not work with some django versions.
         - python: "3.5"
           env: DJANGO_VERSION=">=1.6,<1.7"
         - python: "3.5"
           env: DJANGO_VERSION=">=1.7,<1.8"
-        # Django 1.9 and Python 3.3 don't work together.
-        - python: "3.3"
-          env: DJANGO_VERSION=">=1.9,<1.10"
+        # Django 2.x only works under python3
+        - python: "2.7"
+          env: DJANGO_VERSION=">=2.1,<2.2"
+        - python: "2.7"
+          env: DJANGO_VERSION=">=2.2,<2.3"
+        # Django >= 2.1 only supports python >= 3.5
+        - python: "3.4"
+          env: DJANGO_VERSION=">=2.1,<2.2"
+        - python: "3.4"
+          env: DJANGO_VERSION=">=2.2,<2.3"
+        # Django =>1.6<=1.8 is not supported under python  >=3.6
+        - python: "3.6"
+          env: DJANGO_VERSION=">=1.6,<1.7"
+        - python: "3.6"
+          env: DJANGO_VERSION=">=1.7,<1.8"
 
 install:
   - pip install "Django${DJANGO_VERSION}"

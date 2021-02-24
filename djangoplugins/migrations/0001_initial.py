@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='plugin',
             name='point',
-            field=models.ForeignKey(to='djangoplugins.PluginPoint'),
+            field=models.ForeignKey(to='djangoplugins.PluginPoint', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='plugin',

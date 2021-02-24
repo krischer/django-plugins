@@ -1,7 +1,10 @@
 from __future__ import absolute_import
 
+from optparse import make_option
+
 from django import VERSION as django_version
-from django.core.management import BaseCommand
+
+from django.core.management.base import BaseCommand
 from django.utils import six
 
 from djangoplugins.point import PluginMount
@@ -10,21 +13,29 @@ from djangoplugins.models import Plugin, PluginPoint, REMOVED, ENABLED
 
 
 class Command(BaseCommand):
-    help = "Syncs the registered plugins and plugin points with the model " \
-            "versions."
+    help = ("Syncs the registered plugins and plugin points with the model "
+            "versions.")
+    if django_version <= (1, 8):
+        option_list = BaseCommand.option_list + (
+            make_option('--delete',
+                        action='store_true',
+                        dest='delete',
+                        default=False,
+                        help='delete the REMOVED Plugin and PluginPoint '
+                        'instances.'),
+        )
 
     requires_model_validation = True
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            '--delete',
+        parser.add_argument('--delete',
             action='store_true',
             dest='delete',
-            default=False,
-            help="delete the REMOVED Plugin and PluginPoint instances.")
+            help='delete the REMOVED Plugin and PluginPoint '
+            'instances. ')
 
     def handle(self, *args, **options):
-        sync = SyncPlugins(options['delete'], options['verbosity'])
+        sync = SyncPlugins(options.get('delete'), options.get('verbosity'))
         sync.all()
 
 

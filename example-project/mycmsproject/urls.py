@@ -14,17 +14,16 @@ Including another URLconf
 """
 from __future__ import absolute_import
 
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 
 from djangoplugins.utils import include_plugins
 from .plugins import ContentType
 from .views import index
 
-urlpatterns = patterns(
-    'mycmsproject.views',
+urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^content/', include_plugins(ContentType)),
     url(r'^content/', include_plugins(
         ContentType, '{plugin}/(?P<pk>\d+)/', 'instance_urls'
     )),
-)
+]
