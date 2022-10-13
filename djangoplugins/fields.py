@@ -17,7 +17,7 @@ class PluginField(models.ForeignKey):
             }
 
         super(PluginField, self).__init__(
-            to=kwargs.pop("to", Plugin), *args, **kwargs, on_delete=models.CASCADE)
+            to=kwargs.pop("to", Plugin), *args, **kwargs)
 
 
 class ManyPluginField(models.ManyToManyField):
