@@ -2,8 +2,7 @@ from __future__ import absolute_import
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import gettext_lazy as _
 from djangoplugins.signals import django_plugin_enabled, django_plugin_disabled
 from .utils import get_plugin_name, get_plugin_from_string
 
@@ -26,7 +25,6 @@ class PluginPointManager(models.Manager):
         return self.get(pythonpath=get_plugin_name(point))
 
 
-@python_2_unicode_compatible
 class PluginPoint(models.Model):
     pythonpath = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
@@ -50,7 +48,6 @@ class PluginManager(models.Manager):
         return self.get(pythonpath=name)
 
 
-@python_2_unicode_compatible
 class Plugin(DirtyFieldsMixin, models.Model):
     """
     Database representation of a plugin.
@@ -96,7 +93,7 @@ class Plugin(DirtyFieldsMixin, models.Model):
         return self.pythonpath
 
     def natural_key(self):
-        return (self.pythonpath,)
+        return self.pythonpath,
 
     def is_active(self):
         return self.status == ENABLED
