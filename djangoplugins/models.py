@@ -72,7 +72,7 @@ class Plugin(DirtyFieldsMixin, models.Model):
     status
         Plugin status.
     """
-    point = models.ForeignKey(PluginPoint)
+    point = models.ForeignKey(PluginPoint, on_delete=models.CASCADE)
     pythonpath = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     title = models.CharField(max_length=255, default='', blank=True)

@@ -23,7 +23,7 @@ Source code:
 
 long_description += read_docs('CHANGES.rst')
 
-setup(name='django-plugins-3',
+setup(name='django-plugins',
       version='0.4.0',
       author='Lion Krischer',
       author_email='lion.krischer@googlemail.com',
@@ -35,7 +35,7 @@ setup(name='django-plugins-3',
       url='https://github.com/krischer/django-plugins',
       download_url='http://pypi.python.org/pypi/django-plugins',
       license='LGPL',
-      description='django-plugins-3.',
+      description='django-plugins.',
       long_description=long_description,
       include_package_data=True,
       exclude_package_data={'': ['sample-project']},
@@ -55,6 +55,10 @@ setup(name='django-plugins-3',
           'Programming Language :: Python :: 3.3',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
+          'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: 3.10',
           'Topic :: Software Development :: Libraries :: Python Modules',
       ])
