@@ -13,8 +13,8 @@ reusable.
 
 ### Installation
 
-`django-plugins` is currently tested with Python **2.7**, **3.3**, **3.4**, and
-**3.5** along with Django versions **1.6**-**1.9**. See the [Travis build
+`django-plugins` is currently tested with Python **2.7**, **3.3**, **3.4**, **3.5** and
+**3.10** along with Django versions **1.6**-**4.0**. See the [Travis build
 matrix](https://travis-ci.org/krischer/django-plugins) for detailed information
 regarding the latest master.
 
